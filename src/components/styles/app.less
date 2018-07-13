@@ -1,0 +1,36 @@
+@import './variables.less';
+
+body{
+    margin: 0px;
+    padding: 0px;
+    font-size: 14px;
+    height: 100%;
+}
+section{
+    width: 70%;
+    box-sizing: border-box;
+    margin: auto;
+    min-height: calc(100vh - 280px);
+}
+
+.ant-select-selection__placeholder, .ant-select-search__field__placeholder{
+    color: @dropdown-color!important;
+}
+.ant-input::-moz-placeholder {
+    color: @dropdown-color!important;
+    opacity: 1;
+  }
+  .ant-input:-ms-input-placeholder {
+    color: @dropdown-color!important;
+  }
+  .ant-input::-webkit-input-placeholder {
+    color: @dropdown-color!important;
+  }
+
+.iconStyle{
+    font-size: 26px;
+    &:hover{
+        color: @account-nav-color-blue;
+        cursor: pointer;
+    }
+}

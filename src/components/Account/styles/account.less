@@ -1,0 +1,26 @@
+@import '../../styles/variables.less';
+
+//mailing page styles
+.accountNavMenu a{
+    text-decoration: none
+}
+.accountNavItem{
+    text-align: center;
+    border: 1px solid @account-nav-color-black;
+    border-radius: 12px;
+    width: 100%;
+    display: inline-block;
+    height: 30px;
+    font-size: 1.5em;
+    color: @account-nav-color-black;
+    &:hover{
+        color: @account-nav-color-white;
+        background-color: @account-nav-color-black
+    }
+}
+
+.accountNavItemActive{
+    color: @account-nav-color-white;
+    background-color: @account-nav-color-black;
+}
+

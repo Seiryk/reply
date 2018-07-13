@@ -1,0 +1,43 @@
+@import '../../styles/variables.less';
+
+header{
+    box-sizing: border-box;
+    height: 90px;
+    background-color: @account-nav-color-header;
+    .main-page{
+        color: @account-nav-color-blue;
+        display: inline-block;
+        margin: 20px;
+        font-size: 20px;
+        cursor: pointer;
+        &:hover{
+            text-decoration: underline;
+            color:@account-nav-color-hover
+        }
+    }
+}
+
+.userDetails{
+    float: right;
+    margin-right: 20px;
+    font-size: 20px;
+    display: flex;
+    margin-top: 20px;
+    color: @account-nav-color-blue;
+    .settings {
+        color: @account-nav-color-white;
+        font-size: 32px;
+        margin-right: 10px;
+        cursor: pointer;
+        &:hover{
+            color: @account-nav-color-hover
+        }
+    }
+}
+
+.userName {
+    cursor: pointer;
+    &:hover{
+        color: @account-nav-color-hover
+    }
+}
