@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 import { Icon, Row, Col } from 'antd';
 
 import Dropdown from '../../UI/dropdown';
@@ -47,3 +48,16 @@ const VariableTableContebt = (
 }
 
 export default VariableTableContebt
+
+VariableTableContebt.propTypes = {
+    el: PropTypes.object,
+    projectName: PropTypes.string,
+    fieldName: PropTypes.string,
+    fieldsName: PropTypes.array,
+    projectsName: PropTypes.array,
+    deleteVariablesListItem: PropTypes.func,
+    dropdownHandleChange: PropTypes.func,
+    closeEditMode: PropTypes.func,
+    editVariableItem: PropTypes.func,
+    makeFieldEditable: PropTypes.func,
+}

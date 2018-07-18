@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
-import { Icon, Input, Button, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
+import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import notification from '../Layout/notification/notification';
 import Spiner from '../Layout/Spiner/spiner';
+import NewAccountEmptyRow from './NewAccountEmptyRow';
+import AllAccountsTableContent from './AllAccountsTableContent';
+import AddBtn from '../UI/addButton';
 
 import { createAccount, editAccount, deleteAccount, loadAllAccounts } from '../../actions/index'
-import { getAllAccountsState } from '../../selectors/index'
 import { validation, deleteSelectedItem, makeFieldEditable, closeEditMode } from '../../utils/additionalFunctions'
 
 import './style/AllAccounts.less'
@@ -18,41 +21,31 @@ class AllAccountsPage extends Component {
         name: '',
         newName: '',
         newAPIkey: '',
+        show: false
     }
     renderAccauntsList = (allAccountsArr) => {
-        const { name, APIkey } = this.state;
         return allAccountsArr.map(el => (
-            <div key={el.APIkey} className='rowWraper'>
-                <Row gutter={48}>
-                    <Col span={6}>
-                        {
-                            el.edit ? <Input name={'name'} onChange={this.inputChange} value = {name} /> : <p>{el.name}</p>
-                        }
-                    </Col>
-                    <Col span={6}>
-                        {
-                            el.edit ? <Input name={'APIkey'} onChange={this.inputChange} value = {APIkey} /> : <p>{el.APIkey}</p>
-                        }
-                    </Col>
-                    <Col span={6}><Button onClick={() => this.openAccount(el)} disabled={el.edit}>Войти</Button></Col>
-                    <Col span={6}>
-                        <Icon
-                            className='iconStyle'
-                            type={el.edit ? "close" : "edit"} 
-                            onClick={(e) => el.edit? this.closeEditMode(): this.makeEditable(el)} />
-                        <Icon 
-                            style={{marginLeft: 10}}
-                            className='iconStyle'
-                            type={el.edit ? "check" : "delete"} 
-                            onClick={(e) => el.edit? this.editAccount(el): this.deleteAccount(el) } />
-                    </Col>
-                </Row>
-            </div>
+                <AllAccountsTableContent 
+                    key={el.APIkey}
+                    el={el}
+                    values={this.state}
+                    inputChange={this.inputChange}
+                    openAccount={this.openAccount}
+                    deleteAccount={this.deleteAccount}
+                    makeEditable={this.makeEditable}
+                    editAccount={this.editAccount}
+                    closeEditMode={this.editAccount}
+                />
         ))
     }
     openAccount = ({id}) => {
         this.props.history.push(`/account/${id}/mailinglist`)
     }
+
+    openEmptyRow = () => this.setState({ show: true });
+
+    closeEmptyRow = () => this.setState({ show: false, newAPIkey: '', newName: '' });
+
     deleteAccount = ({id}) => {
         const message = 'аккаунт';
         deleteSelectedItem(id, message, this, this.props.deleteAccount);
@@ -78,6 +71,11 @@ class AllAccountsPage extends Component {
         const valid = validation(trimNewName);
         if ( trimNewName.length && trimNewAPIkey.length && valid ) {
             this.props.createAccount({name: trimNewName, APIkey: trimNewAPIkey})
+            this.setState({
+                newAPIkey: '',
+                newName: '',
+                show: true
+            })
         }
         else notification('error', 'Поля пустые или не соответствуют формату');
     }
@@ -87,11 +85,7 @@ class AllAccountsPage extends Component {
     }
     
     componentWillReceiveProps(nextProps){
-        this.setState({
-            allAccountsList: nextProps.allAccountsState.allAccountsList,
-            newAPIkey: '',
-            newName: ''
-        })
+        this.setState({allAccountsList: nextProps.allAccountsList})
     }
     closeEditMode = () => {
         closeEditMode(this, 'allAccountsList')
@@ -108,8 +102,8 @@ class AllAccountsPage extends Component {
     }
 
     render() {
-        const { allAccountsList, newAPIkey, newName  } = this.state;
-        const { loading  } = this.props.allAccountsState;
+        const { allAccountsList, newAPIkey, newName, show } = this.state;
+        const { loading  } = this.props;
         return (
             <div>
                 {
@@ -123,23 +117,15 @@ class AllAccountsPage extends Component {
                                                     {
                                                         this.renderAccauntsList(allAccountsList)
                                                     }
-                                                    <div className='rowWraper'>
-                                                        <Row onClick={this.closeEditMode} gutter={48}>
-                                                            <Col span={6}>
-                                                                <Input name={'newName'} onChange={this.inputChange} value ={newName} />
-                                                            </Col>
-                                                            <Col span={6}>
-                                                                <Input name={'newAPIkey'} onChange={this.inputChange} value = {newAPIkey} />
-                                                            </Col>
-                                                            <Col span={6}></Col>
-                                                            <Col span={6}>
-                                                                <Icon 
-                                                                    className='iconStyle'  
-                                                                    type="plus-circle-o"
-                                                                    onClick={(e) => this.addNewAccount()} />
-                                                            </Col>
-                                                        </Row>
-                                                    </div>
+                                                    {show || !allAccountsList.length ? 
+                                                    <NewAccountEmptyRow 
+                                                    inputChange={this.inputChange}
+                                                    addNewAccount={this.addNewAccount}
+                                                    closeEmptyRow={this.closeEmptyRow}
+                                                    newName={newName}
+                                                    newAPIkey={newAPIkey}
+                                                    /> :
+                                                    <AddBtn addFunc={this.openEmptyRow} offset={22} />}
                                                 </div>
                                             </React.Fragment>}
 
@@ -150,7 +136,8 @@ class AllAccountsPage extends Component {
 
 const mapStateToProps = (state) => {
     return{
-        allAccountsState: getAllAccountsState(state),
+        allAccountsList: state.allAccounts.allAccountsList,
+        loading: state.allAccounts.loading,
     }
 }
 
@@ -160,3 +147,12 @@ export default withRouter(connect(mapStateToProps, {
     loadAllAccounts,
     deleteAccount
 })(AllAccountsPage));
+
+AllAccountsPage.propTypes = {
+    loading: PropTypes.bool,
+    allAccountsList: PropTypes.array,
+    createAccount: PropTypes.func,
+    loadAllAccounts: PropTypes.func,
+    editAccount: PropTypes.func,
+    deleteAccount: PropTypes.func,
+}

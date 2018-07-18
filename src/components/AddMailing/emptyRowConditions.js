@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import { Row, Col, Icon, Input } from 'antd'
+import React from 'react'
+import { Row, Col, Input } from 'antd'
 import Dropdown from '../UI/dropdown'
+import IconsCheckClose from '../UI/IconsCheckClose'
 
 
-export default class emptyRow extends Component {
-    render() {
+const EmptyRowCondition = (props) => {
         const { 
             values,
             operators,
@@ -13,7 +13,7 @@ export default class emptyRow extends Component {
             closeEmptyRowCondition,
             addNewCondition,
             changeHandlerForNewVals
-        } = this.props;
+        } = props;
         return (
             <div style={{marginTop: 50}} className='conditionRowWrapper'>
                 <Row>
@@ -47,12 +47,10 @@ export default class emptyRow extends Component {
                             style={{width: '200px'}}/>
                          }
                     </Col>
-                    <Col span={4}>
-                        <Icon style={{marginLeft: 3}} onClick={addNewCondition}  className='iconStyle' type='check' />
-                        <Icon style={{marginLeft: 10}} onClick={closeEmptyRowCondition} className='iconStyle' type='close' />
-                    </Col>
+                    <IconsCheckClose addNew={addNewCondition} closeEmptyRow={closeEmptyRowCondition} span={4} />
                 </Row>
             </div>
         )
-    }
 }
+
+export default EmptyRowCondition;

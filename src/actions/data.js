@@ -230,3 +230,98 @@ export const newdata = {
     bindings: [
     ]
 }
+
+export const replyAccessGroup = [
+    {
+        name: 'stern',
+        id: '123123'
+    },
+    {
+        name: 'nevis',
+        id: '46644'
+    },
+    {
+        name: 'pixel',
+        id: '24523'
+    },
+]
+export const adminAccessGroup = [
+    {
+        name: 'rock',
+        id: '3133'
+    },
+    {
+        name: 'smile',
+        id: '45325'
+    },
+    {
+        name: 'fok',
+        id: '53363'
+    },
+]
+
+export const allAccesses = [
+    {value: 'replyAccessGroup', text: 'reply'},
+    {value: 'adminAccessGroup', text: 'admin'},
+    ]
+
+export const accessUsers = [
+    {
+        text: 'user 1',
+        value: '2412412241'
+    },
+    {
+        text: 'user 2',
+        value: '5345345'
+    },
+    {
+        text: 'user 3',
+        value: '33525'
+    },
+    {
+        text: 'user 4',
+        value: '74745747'
+    },
+    {
+        text: 'user 5',
+        value: '88586585'
+    },
+    {
+        text: 'user 6',
+        value: '4647747'
+    },
+    {
+        text: 'user 7',
+        value: '76967967'
+    },
+]
+export const logsList = [
+    {
+        text: 'Тут будут все задачи, связанные с фронтом данного сервиса.',
+        value: '2412412241'
+    },
+    {
+        text: 'Oбщий макет доступен по ссылке (страницы нужно листать):',
+        value: '5345345'
+    },
+    {
+        text: 'Tут вносить все траты по оформлению главной страницы приложения и страницы логина.',
+        value: '33525'
+    },
+    {
+        text: 'Кружки с числами -это комментарии к макету в мокапсе так отображаются',
+        value: '74745747'
+    },
+    {
+        text: 'Сделать фронт для вкладок раздела "Администрирование"',
+        value: '88586585'
+    },
+    {
+        text: 'страницы с вкладками "Список рассылок" и "Настройка',
+        value: '4647747'
+    },
+    {
+        text: 'Вкладка "Настройка пользовательских полей":',
+        value: '76967967'
+    },
+]

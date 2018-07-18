@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Input, Icon } from 'antd';
 
 
@@ -30,4 +31,11 @@ const MailingName = (props) => {
     )
 }
 
-export default MailingName
+export default MailingName;
+
+MailingName.propTypes = {
+    mailingName: PropTypes.string,
+    editMailingName: PropTypes.bool,
+    changeHandlerForNewVals: PropTypes.func,
+    makeMailingNameEditable: PropTypes.func,
+}

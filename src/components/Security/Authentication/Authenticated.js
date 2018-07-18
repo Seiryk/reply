@@ -9,6 +9,7 @@ import Header from '../../Header/header/header'
 import Footer from '../../Footer/footer'
 import AllAccounts from '../../AllAccounts/AllAccounts'
 const Account = () => <Async load={import('../../Account/Account')} />;
+const AdminPage = () => <Async load={import('../../Admin/AdminPage')} />;
 const AddMailing = () => <Async load={import('../../AddMailing/addMailing')} />;
 
 
@@ -56,6 +57,7 @@ class Authenticated extends Component {
                 <section>
                     <Switch>
                         <Route path="/account/:id" component={Account}/>
+                        <Route path="/admin/" component={AdminPage}/>
                         <Route path='/mailing/add' render={() => <AddMailing /> } />
                         <Route path='/mailing/edit/:id' render={() => <AddMailing /> } />
                         <Route path="/" exact component={AllAccounts}/>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { Button } from 'antd';
 import { withRouter } from 'react-router-dom'
@@ -24,11 +25,11 @@ class AddMailind extends Component {
         applServicesArrays: this.props.applServicesArrays,
         operators: this.props.operators,
         statuses: this.props.statuses,
-        status: null,
+        status: '',
         additionalConditions: this.props.additionalConditions,
         bindings: this.props.bindings,
         companies: this.props.companies,
-        mailingName: null,
+        mailingName: '',
         emptyRowCondition: false,
         emptyRowBinding: false,
         newApplService: null,
@@ -75,7 +76,7 @@ class AddMailind extends Component {
         }   
         else notification('error', 'Поля пустые или не соответствуют формату ')
     }
-
+    // показывает пустую строку для добавления и привязок и условий
     addEmptyRow = (prop) => this.setState({[prop]: true})
 
     makeMailingNameEditable = () => {
@@ -109,7 +110,7 @@ class AddMailind extends Component {
         deleteSelectedItem(el, message, this, this.props.removeBinding) : 
             notification('error', 'У рассылки не может быть меньше одной привязки')
     }
-
+    // обробатывает дропдауны где добавляются новые элементы
     changeHandlerForNewVals = (val, name) => {
         const { applServicesArrays } = this.state
         if (!applServicesArrays[val] && name === 'newApplService') this.props.changeApplServiceArr(val);
@@ -127,7 +128,7 @@ class AddMailind extends Component {
 
     }
     
-
+    // обробатывает дропдауны где изменяются старые элементы
     changeHandlerForOldVals = (val, fieldName, id) => {
         const { applServicesArrays } = this.state;
         if (!applServicesArrays[val] && fieldName === 'applService') this.props.changeApplServiceArr(val)
@@ -154,11 +155,24 @@ class AddMailind extends Component {
         
     }
 
-    submit = () => {
+    // проверяет заполнено ли поле applServiceValue (так как оно в процессе редактирования может стать путым)
+    chekValidity = (arr) => {
+        let valid = true;
+        arr.forEach(el => {
+            if (!el.applServiceValue) valid = false;
+            return
+        });
+        return valid
+    }
+
+    
+    submitHandler = () => {
         const { additionalConditions, status, bindings, mailingName } = this.state;
+        const isValid = this.chekValidity(additionalConditions);
         const mailing =  { additionalConditions, status, bindings, mailingName };
         if (!mailingName)  notification('error', 'Название рассылки не должно быть пустым')
         else if (!status)  notification('error', 'Статус рассылки не должен быть пустым')
+        else if (!isValid)  notification('error', 'Все поля в условиях должны быть заполненны')
         else if (!bindings.length)  notification('error', 'Должна быть миннимум одна привязка')
         else this.props.sendNewMailing(mailing)
     }
@@ -204,7 +218,7 @@ class AddMailind extends Component {
                     />
                     <div className='buttonWrap'>
                         <Button className='goBack' onClick={() => this.props.history.goBack()}>Назад</Button>
-                        <Button className='submit' onClick={this.submit}>Сохранить</Button>
+                        <Button className='submit' onClick={this.submitHandler}>Сохранить</Button>
                     </div>
                 </div> }
             </React.Fragment>
@@ -216,6 +230,8 @@ class AddMailind extends Component {
         this.props.getMailingItemConfigurationOptions(id)
     }
 
+    // сравнивает стэйт компонента и данные из стора 
+    // и если есть элементы с одинаковыми id то берет элемнет из стэйта компонента
     checkingState= (nextProps, prevState, name) => {
         let newArr = [];
         nextProps[name].forEach(newEl => {
@@ -249,7 +265,6 @@ const mapStateToProps  = (state) => ({
     status: state.addMailing.status,
     mailingName: state.addMailing.mailingName,
     loading: state.addMailing.loading,
-    bindsToCompanies: state.addMailing.bindsToCompanies,
     applServices: state.addMailing.applServices,
     applServicesArrays: state.addMailing.applServicesArrays,
     operators: state.addMailing.operators,
@@ -266,4 +281,25 @@ export default withRouter(connect(mapStateToProps, {
     removeCondition,
     sendNewMailing,
     removeBinding,
-})(AddMailind))
+})(AddMailind));
+
+
+AddMailind.propTypes = {
+    getMailingItemConfigurationOptions: PropTypes.func,
+    changeApplServiceArr: PropTypes.func,
+    addNewCondition: PropTypes.func,
+    addNewBinding: PropTypes.func,
+    removeCondition: PropTypes.func,
+    sendNewMailing: PropTypes.func,
+    removeBinding: PropTypes.func,
+    bindings: PropTypes.array,
+    companies: PropTypes.array,
+    additionalConditions: PropTypes.array,
+    operators: PropTypes.array,
+    applServicesArrays: PropTypes.object,
+    applServices: PropTypes.array,
+    statuses: PropTypes.array,
+    loading: PropTypes.bool,
+    status: PropTypes.string,
+    mailingName: PropTypes.string,
+}

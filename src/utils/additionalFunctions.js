@@ -18,13 +18,13 @@ export function parseJwt(token) {
 };
 
 
-
+// валидация на email
 export const validation = (string) => {
     const regExpEmail = /^[-._a-z0-9]+@(?:[a-z0-9][-a-z0-9]+\.)+[a-z]{2,6}$/;
     return string.match(regExpEmail) !== null
 }
 
-
+// модалка для удаления
 export const  modalConfirm = (title, modalConfirmHandler, context, deleteFunc) => {
     confirm({
       title,
@@ -37,10 +37,11 @@ export const  modalConfirm = (title, modalConfirmHandler, context, deleteFunc) =
     });
   }
 
+// дополнительная функция для удаления(вызывет экшн для удаления)
  const modalConfirmHandler = (status, context, deleteFunc) => {
     status && deleteFunc(context.state.removeItemData);
 }
-
+// всплывающее окно для удаления 
 export const deleteSelectedItem = (data, name, context, deleteFunc) => {
   const question =  `Вы уверенны что хотите удалить ${name}`;
   modalConfirm(question, modalConfirmHandler, context, deleteFunc)
@@ -49,6 +50,12 @@ export const deleteSelectedItem = (data, name, context, deleteFunc) => {
   });
 }
 
+
+// включает режим редактированя (вынесена сдесь так как используется в нескольких компонентах)
+// id id id элемента
+// context это контекст компонента 
+// statePropName имя свойства из стэйта (массив) который мы перебираем что бы определить какой элемент редоктируем
+// prop1 и prop2 свойства объекта которые записываем в стэйт что бы сохранить текущее значение 
 export const makeFieldEditable = (id, context, statePropName, prop1, prop2 ) => {
     let val1;
     let val2;
@@ -67,6 +74,8 @@ export const makeFieldEditable = (id, context, statePropName, prop1, prop2 ) => 
         }
     })
 }
+
+// закрываем режим редактирования
 export const closeEditMode = (context, nameStateProp) => {
   context.setState(prevState => {
       return {

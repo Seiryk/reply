@@ -1,8 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Row, Col, Icon, Input } from 'antd'
 import Dropdown from '../UI/dropdown'
 import AddButton from '../UI/addButton'
 import EmptyRowConditions from './emptyRowConditions'
+
+const errorStyle = {borderColor: 'red', boxShadow: 'none'};
 
 const ConditionBlock = (props) => {
         const { 
@@ -73,7 +76,7 @@ const ConditionBlock = (props) => {
                                             placeholder='Введите значение'
                                             onChange={(e) => changeHandlerForOldVals(e.target.value, e.target.name, el.id)} 
                                             value={el.applServiceValue} 
-                                            style={{width: '200px'}}/>
+                                            style={{width: '200px', ...(el.applServiceValue ? {} : errorStyle) }}/>
                                      }
                                 </Col>
                                 <Col span={2}><Icon onClick={() => removeCondition(el)} className='iconStyle' type='delete' /></Col>
@@ -91,11 +94,27 @@ const ConditionBlock = (props) => {
                         addNewCondition={addNewCondition}
                         applServicesArrays={applServicesArrays}
                         changeHandlerForNewVals={changeHandlerForNewVals}
-                  /> : null
+                  /> : 
+                  <AddButton addFunc={() =>addEmptyRow('emptyRowCondition')} offset={20} />
                 }
-                <AddButton addFunc={() =>addEmptyRow('emptyRowCondition')} offset={20} />
             </div>
         )
 }
 
-export default ConditionBlock
+export default ConditionBlock;
+
+ConditionBlock.propTypes = {
+    operators: PropTypes.array,
+    additionalConditions: PropTypes.array,
+    applServices: PropTypes.array,
+    applServicesArrays: PropTypes.object,
+    statuses: PropTypes.array,
+    status: PropTypes.string,
+    valuesForEmptyRowCondition: PropTypes.object,
+    addEmptyRow: PropTypes.func,
+    addNewCondition: PropTypes.func,
+    closeEmptyRowCondition: PropTypes.func,
+    removeCondition: PropTypes.func,
+    changeHandlerForNewVals: PropTypes.func,
+    changeHandlerForOldVals: PropTypes.func,
+}

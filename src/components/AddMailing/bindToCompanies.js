@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Row, Col, Tooltip, Icon, Input } from 'antd'
 import Dropdown from '../UI/dropdown'
 import AddButton from '../UI/addButton'
@@ -49,6 +50,7 @@ const ConditionBlock = (props) => {
                                 <Input 
                                     type='number'
                                     name='delay'
+                                    min={1}
                                     placeholder={'Задержка'}
                                     onChange={(e) => changeHandlerForOldVals(e.target.value, e.target.name, el.id )}
                                     value = {el.delay} />
@@ -75,11 +77,20 @@ const ConditionBlock = (props) => {
                         addNewBinding={addNewBinding} 
                         closeEmptyBindingRow={closeEmptyBindingRow}
                         changeHandlerForNewVals={changeHandlerForNewVals}
-                   /> : null
+                   /> :
+                   <AddButton addFunc={() => addEmptyRow('emptyRowBinding')} offset={20} />
                 }
-                <AddButton addFunc={() => addEmptyRow('emptyRowBinding')} offset={20} />
             </div>
         )
 }
 
-export default ConditionBlock
+export default ConditionBlock;
+
+ConditionBlock.propTypes = {
+    addEmptyRow: PropTypes.func,
+    changeHandlerForOldVals: PropTypes.func,
+    removeBinding: PropTypes.func,
+    bindings: PropTypes.array,
+    companies: PropTypes.array,
+    valuesForEmptyRowBindings: PropTypes.object,
+}

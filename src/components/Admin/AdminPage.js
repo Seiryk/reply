@@ -1,20 +1,19 @@
 import React from 'react'
-import { Row, Menu, Col, Icon } from 'antd';
-import Async from 'react-code-splitting';
+import {  Menu, Icon } from 'antd';
 import { NavLink, Route, Switch, withRouter } from 'react-router-dom';
-import MailingList from './MailingList/MailingList';
 import PageNotFound from '../Layout/pageNotFound/pageNotFound';
+import LogsList from './LogsList';
+import AccessConfig from './AccessConfig';
 
-import './styles/account.less'
+import './styles/admin.less'
 
-const VariablesList = () => <Async load={import('./VariableList/VariablesList')} />;
 
-const Account = ({match: {params: { id }}, history, location: {pathname}}) =>  {
+const AdmimPage = ({match: {params: { id }}, history, location: {pathname}}) =>  {
     let currentLinkArr = pathname.split('/');
     const currentLink = currentLinkArr[currentLinkArr.length - 1];
     const selectedKeys = [currentLink];
-    const mailing = 'Список рассылок';
-    const variables = 'Настройка пользовательских полей';
+    const access = 'Управление доступом';
+    const logs = 'Просмотр логов';
     return (
         <div>
             <nav >
@@ -31,25 +30,25 @@ const Account = ({match: {params: { id }}, history, location: {pathname}}) =>  {
                     </Col>
                 </Row> */}
                     <Menu selectedKeys={selectedKeys} mode='horizontal'>
-                        <Menu.Item key="mailinglist">
-                            <NavLink to={`/account/${id}/mailinglist`}>
-                                <Icon type="mail" />{mailing}
+                        <Menu.Item key="access">
+                            <NavLink to={`/admin/access`}>
+                                <Icon type="usergroup-add" />{access}
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="variablelist">
-                            <NavLink to={`/account/${id}/variablelist`}>
-                                <Icon type="setting" />{variables}
+                        <Menu.Item key="logs">
+                            <NavLink to={`/admin/logs`}>
+                                <Icon type="profile" />{logs}
                             </NavLink>
                         </Menu.Item>
                     </Menu>
             </nav>
             <Switch>
-                <Route path='/account/:id/mailinglist' render={() => <MailingList history={history} title={mailing} id={id} />} />
-                <Route path='/account/:id/variablelist' render={() => <VariablesList title={variables} id={id} /> } />
+                <Route path='/admin/access' render={() => <AccessConfig />} />
+                <Route path='/admin/logs' render={() => <LogsList /> } />
                 <Route path="*" component={PageNotFound} />
             </Switch>
         </div>
     )
 }
 
-export default withRouter(Account)
+export default withRouter(AdmimPage)

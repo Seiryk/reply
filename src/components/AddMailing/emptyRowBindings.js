@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import { Row, Col, Icon, Input } from 'antd'
 import Dropdown from '../UI/dropdown'
 
 
-export default class emptyRow extends Component {
-    render() {
+const emptyRowBindings = (props) =>  {
         const {
             companies,
             values,
             addNewBinding,
             closeEmptyBindingRow,
             changeHandlerForNewVals
-        } = this.props;
+        } = props;
         return (
             <div style={{marginTop: 50}} className='conditionRowWrapper'>
                 <Row className='conditionRowWrapper'>
@@ -19,12 +19,13 @@ export default class emptyRow extends Component {
                         <Input 
                             type='number'
                             name='newDelay'
+                            min={1}
                             placeholder={'Задержка'}
                             onChange={(e) => changeHandlerForNewVals(e.target.value, e.target.name )}
                             value = {values.newDelay} />
                     </Col>
                     <Col offset={4} span={4}>
-                        <Dropdown 
+                        <Dropdown
                             name='newCompany'
                             defaultValue={values.newCompany} 
                             options={companies}
@@ -38,5 +39,14 @@ export default class emptyRow extends Component {
                 </Row>
             </div>
         )
-    }
+}
+
+export default emptyRowBindings;
+
+emptyRowBindings.propTypes = {
+    addNewBinding: PropTypes.func,
+    closeEmptyBindingRow: PropTypes.func,
+    changeHandlerForNewVals: PropTypes.func,
+    companies: PropTypes.array,
+    values: PropTypes.object,
 }

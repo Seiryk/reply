@@ -10,7 +10,7 @@ export default class Header extends Component {
             <header >
                 <NavLink to='/' className='main-page'>Главная страница</NavLink>
                 <div className='userDetails'>
-                    <Icon className="settings" type="setting"/>
+                    <NavLink to='/admin/access' ><Icon className="settings" type="setting"/></NavLink>
                     <UserDetails />
                 </div>
             </header>

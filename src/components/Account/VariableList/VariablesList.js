@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-
+import PropTypes from 'prop-types'
 import { Row, Col } from 'antd';
 import {connect} from 'react-redux';
 
 import Spiner from '../../Layout/Spiner/spiner';
 import { deleteVariable, editVariable, createVariable, loadAllVariables } from '../../../actions/index'
-import { getVariablesState } from '../../../selectors/index'
 import notification from '../../Layout/notification/notification'
-import AddField from './AddField'
+import NewVariableEmptyRow from './NewVariableEmptyRow'
 import VariablesTableContent from './VariablesTableContent'
 import AddBtn from '../../UI/addButton'
 import { deleteSelectedItem, makeFieldEditable, closeEditMode } from '../../../utils/additionalFunctions'
@@ -19,25 +18,15 @@ class VariablesList extends Component {
         newFieldName: '',
         newProjectName: '',
         fieldName: '',
-        projectName: ''
+        projectName: '',
+        emptyVariableRow: false
     }
-
     renderTable = (variablesList) => {
-        const { fieldsName, projectsName } = this.props.variablesState;
-        const { newFieldName, newProjectName, fieldName, projectName} = this.state;
+        const { fieldsName, projectsName } = this.props;
+        const { fieldName, projectName} = this.state;
         return variablesList.map((el, index) => {
             return(
                 <div key={index} className='rowWraper'>
-                    {el.new ? 
-                        <AddField
-                            fieldsName={fieldsName}
-                            projectsName={projectsName}
-                            newFieldName={newFieldName}
-                            newProjectName={newProjectName}
-                            dropdownHandleChange={this.dropdownHandleChange}
-                            closeAddField={this.closeAddField}
-                            addNewVariable={this.addNewVariable}
-                        /> :
                         <VariablesTableContent
                             el={el}
                             fieldsName={fieldsName}
@@ -50,7 +39,6 @@ class VariablesList extends Component {
                             editVariableItem={this.editVariableItem}
                             makeFieldEditable={this.makeFieldEditable}
                         />
-                    }
                 </div>
             )
         })
@@ -62,11 +50,7 @@ class VariablesList extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        this.setState({
-            variablesList: nextProps.variablesState.variablesList,
-            newFieldName: '',
-            newProjectName: ''
-        })
+        this.setState({ variablesList: nextProps.variablesList })
     }
 
     componentDidMount(){
@@ -78,6 +62,7 @@ class VariablesList extends Component {
         const { newFieldName, newProjectName } = this.state;
         if ( newFieldName.length && newProjectName.length ) {
             this.props.createVariable({projectName: newProjectName, fieldName: newFieldName})
+            this.setState({ newFieldName: '', newProjectName: '', emptyVariableRow: true})
         }
         else notification('error', 'Поля не заполнены');
     }
@@ -97,28 +82,9 @@ class VariablesList extends Component {
         closeEditMode(this, 'variablesList')
     }
 
-    closeAddField = () => {
-        this.setState(prevState => {
-            return {
-                variablesList: prevState.variablesList.filter(el => el.new !== true),
-                newFieldName: '',
-                newProjectName: ''
-            }
-        })
-    }
+    closeEmptyVariableRow = () => this.setState({ newFieldName: '', newProjectName: '', emptyVariableRow: false });
 
-    addField = () => {
-        const isNew = this.state.variablesList.find(el => el.new === true);
-        if (!isNew) {
-            this.setState(prevState => {
-                return {
-                    variablesList: [...prevState.variablesList,{
-                        new: true
-                    }]
-                }
-            })
-        }
-    }
+    showEmptyVariableRow = () => this.setState({emptyVariableRow: true});
 
     dropdownHandleChange = (val, name) => {
         this.setState({
@@ -127,29 +93,40 @@ class VariablesList extends Component {
     }
 
     render() {
-        const { variablesList } = this.state;
-        const { title, variablesState: { loading }  } = this.props;
+        const { variablesList, newFieldName, newProjectName, emptyVariableRow } = this.state;
+        const { title, loading, fieldsName, projectsName  } = this.props;
         return (
             <div>
                
                 {
-                    loading ? <Spiner />: <React.Fragment>
-                                            <h1 className='title'>{title}</h1>
-                                            <div className='tableWraper'>
-                                            <Row gutter={48}>
-                                                <Col offset={3} span={6} >
-                                                    <span className='tableFieldName' >Название поля в Reply</span>
-                                                </Col>
-                                                <Col span={6} >
-                                                    <span className='tableFieldName' >Откуда брать значения ?</span>
-                                                </Col>
-                                            </Row>
-                                            {
-                                                this.renderTable(variablesList)
-                                            }
-                                            <AddBtn offset={19} addFunc={this.addField} />
-                                            </div>
-                                        </React.Fragment>}
+                    loading ? <Spiner />: 
+                    <React.Fragment>
+                        <h1 className='title'>{title}</h1>
+                        <div className='tableWraper'>
+                        <Row gutter={48}>
+                            <Col offset={3} span={6} >
+                                <span className='tableFieldName' >Название поля в Reply</span>
+                            </Col>
+                            <Col span={6} >
+                                <span className='tableFieldName' >Откуда брать значения ?</span>
+                            </Col>
+                        </Row>
+                        {
+                            this.renderTable(variablesList)
+                        }
+                        {
+                            emptyVariableRow || !variablesList.length ? <NewVariableEmptyRow
+                                fieldsName={fieldsName}
+                                projectsName={projectsName}
+                                newFieldName={newFieldName}
+                                newProjectName={newProjectName}
+                                dropdownHandleChange={this.dropdownHandleChange}
+                                closeEmptyVariableRow={this.closeEmptyVariableRow}
+                                addNewVariable={this.addNewVariable}/> :
+                                    <AddBtn offset={19} addFunc={this.showEmptyVariableRow} />
+                        }
+                        </div>
+                    </React.Fragment>}
             </div>
         )
     }
@@ -157,7 +134,10 @@ class VariablesList extends Component {
 
 const mapStateToProps = (state) => {
     return{
-        variablesState: getVariablesState(state),
+        loading: state.variables.loading,
+        fieldsName: state.variables.fieldsName,
+        variablesList: state.variables.variablesList,
+        projectsName: state.variables.projectsName,
     }
 }
 
@@ -167,3 +147,14 @@ export default connect(mapStateToProps, {
     editVariable,
     loadAllVariables
 })(VariablesList);
+
+VariablesList.propTypes = {
+    loading: PropTypes.bool,
+    fieldsName: PropTypes.array,
+    projectsName: PropTypes.array,
+    createVariable: PropTypes.func,
+    deleteVariable: PropTypes.func,
+    editVariable: PropTypes.func,
+    variablesList: PropTypes.array,
+    loadAllVariables: PropTypes.func,
+}

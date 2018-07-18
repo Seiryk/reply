@@ -1,0 +1,93 @@
+@import '../../styles/variables.less';
+
+// стили блока управления доступами
+.listOfAccesses{
+    margin-top: 30px
+}
+
+.accessGroupName{
+    margin-top: 20px;
+    div{
+        padding-bottom: 9px;
+        padding-top: 9px;
+        border-bottom: 1px solid #e7e7e7;
+        display: flex;
+        justify-content: space-around;
+        &:hover{
+            background-color: #f6f6f6;
+            border-bottom: 1px solid #f6f6f6;
+        }
+        span{
+            min-width: 100px;
+            align-self: center;
+            margin-right: 50px;
+            font-size: 15px
+        }
+        .accessIconStyle{
+            align-self: center
+        }
+    }
+}
+
+.accessIconStyle{
+    font-size: 20px;
+    &:hover{
+        color: @account-nav-color-blue;
+        cursor: pointer;
+    }
+}
+
+.accessGroupLoader{
+    margin-left: 45%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.addNewUserAccess{
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    height: 90px;
+    min-width: 135px;
+    justify-content: start;
+    border-left: 1px solid #e7e7e7;
+    h1{
+        width: 100%;
+        text-align: start;
+        margin-left: 20px
+    }
+    .icons{
+    margin-left: 20px;
+    }
+}
+
+// стили блока просмотра логов
+.logWraper{
+    margin: 20px 50px;
+    .logsListRow{
+        margin-top: 50px;
+    }
+}
+
+.filterBtn{
+    margin-left: 20px
+}
+.text{
+    width: 40px;
+    display: inline-block;
+    text-align: center
+}
+
+
+.logsListHeader{
+    text-align: center;
+}
+
+.logsListContent{
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+    background: #f6f6f6;
+    p{
+        margin: 5px
+    }
+}

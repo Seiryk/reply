@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Icon, Row, Col } from 'antd';
 import {connect} from 'react-redux';
 import Spiner from '../../Layout/Spiner/spiner';
 
 import { deleteMailingItem, getMailingItems } from '../../../actions/index'
-import { getMailingState } from '../../../selectors/index'
 import { deleteSelectedItem } from '../../../utils/additionalFunctions'
 import  AddBtn  from '../../UI/addButton'
 
@@ -27,14 +27,11 @@ class MailingList extends Component {
         getMailingItems(id);
     }
     render() {
-        const { mailingState: {loading, mailingList}, title } = this.props;
+        const { loading, mailingList,  title } = this.props;
         return (
             <div>
                 {
-                    loading ? <Spiner />: null
-                }
-                {
-                mailingList.length ? 
+                    loading ? <Spiner />: 
                     <React.Fragment>
                             <h1 className='title'>{title}</h1>
                             <div className='tableWraper'>
@@ -64,7 +61,7 @@ class MailingList extends Component {
                                 }
                                 <AddBtn offset={16} addFunc={this.addNewMailing} />
                             </div>
-                        </React.Fragment> : null
+                        </React.Fragment>
                 }
             </div>
         )
@@ -73,7 +70,8 @@ class MailingList extends Component {
 
 const mapStateToProps = (state) => {
     return{
-        mailingState: getMailingState(state),
+        loading: state.mailing.loading,
+        mailingList: state.mailing.mailingList,
     }
 }
 
@@ -81,3 +79,12 @@ export default connect(mapStateToProps, {
     deleteMailingItem,
     getMailingItems
 })(MailingList);
+
+MailingList.propTypes = {
+    deleteMailingItem: PropTypes.func,
+    id: PropTypes.string,
+    title: PropTypes.string,
+    getMailingItems: PropTypes.func,
+    loading: PropTypes.bool,
+    mailingList: PropTypes.array,
+};
