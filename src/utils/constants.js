@@ -43,3 +43,20 @@ export const ACCESS_GROUP_LOADER = 'ACCESS_GROUP_LOADER';
 export const DELETE_ACCESS_GROUP_USER = 'DELETE_ACCESS_GROUP_USER';
 export const UPDATE_USER_ACCESS_GROUP = 'UPDATE_USER_ACCESS_GROUP';
 export const GET_LOGS_LIST = 'GET_LOGS_LIST';
+
+//authorization
+export const UNAUTHENTICATED = 'UNAUTHENTICATED';
+export const AUTHENTICATED = 'AUTHENTICATED';
+export const ROLE_USER = 'ROLE_USER';
+export const ROLE_RESP = 'ROLE_RESPONSIBLE';
+export const ROLE_ADMIN = 'ROLE_ADMIN';
+
+
+// error messages variables
+export const error = 'error'
+export const emptyError  = 'Все поля должны быть заполнены'
+export const emptyCanditionError  = 'Все поля в условиях должны быть заполненны'
+export const statuseError  = 'Статус рассылки не должен быть пустым'
+export const mailingNameError  = 'Название рассылки не должно быть пустым'
+export const quantityBindError  = 'Должна быть миннимум одна привязка'
+export const dateSizeError  = 'Минимальное значение не должно быть больше максимального'

@@ -91,7 +91,7 @@ class AccessConfig extends Component {
                         </Col>
                         <Col offset={1} span={9}>
                             {activeAccessGroup ? <div className='addNewUserAccess'>
-                                <h1>Добавить пользователя</h1>
+                                <h1>Добавить сотрудника</h1>
                                 <div style={{marginLeft: 20}}>
                                     <Dropdown defaultValue={selectedUserForAdding.value} 
                                         name={activeAccessGroup} 

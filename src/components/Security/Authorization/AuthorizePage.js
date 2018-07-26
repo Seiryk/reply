@@ -1,25 +1,21 @@
 import React from 'react';
 import BaseAuthorize from './BaseAuthorize';
-import HasNotAccess from '../../Layout/HasNotAccess';
-import {ROLE_ADMIN, ROLE_RESP} from "../../../constants";
+import {ROLE_ADMIN, ROLE_USER} from "../../../utils/constants";
 
-const AuthorizePage = (allowedRoles) => (WrappedComponent) =>
-        class AuthorizePage extends BaseAuthorize {
-            
-            render() {
-                let hasAccess = this.hasAccess(allowedRoles);
 
-                if (hasAccess) {
-                    return <WrappedComponent {...this.props} />
-                } else {
-                    return (<HasNotAccess />)
-                }
-            }
-        };
+const AuthorizePage = (role) => (WrapedComponent) => {
+    return class AuthorizePage extends React.Component {
+        render() {
+            return (
+                <BaseAuthorize role={role}>
+                    <WrapedComponent />
+                </BaseAuthorize>
+            )
+        }
+    }
+}
 
-export default AuthorizePage;
-
-export const AutorizePageAdmin = (WrappedComponent) => AuthorizePage([ROLE_ADMIN])(WrappedComponent);
-export const AutorizePageResp = (WrappedComponent) => AuthorizePage([ROLE_RESP])(WrappedComponent);
+export const authorizePageUser = (WrapedComponent) => AuthorizePage(ROLE_USER)(WrapedComponent);
+export const authorizePageAdmin = (WrapedComponent) => AuthorizePage(ROLE_ADMIN)(WrapedComponent);
 
 

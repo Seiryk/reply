@@ -17,30 +17,18 @@ const AdmimPage = ({match: {params: { id }}, history, location: {pathname}}) => 
     return (
         <div>
             <nav >
-                {/* <Row>
-                    <Col span={12}>
-                        <NavLink className='accountNavItem' activeClassName='accountNavItemActive' to={`/account/${id}/mailinglist`}>
-                            {mailing}
+                <Menu selectedKeys={selectedKeys} mode='horizontal'>
+                    <Menu.Item key="access">
+                        <NavLink to={`/admin/access`}>
+                            <Icon type="usergroup-add" />{access}
                         </NavLink>
-                    </Col>
-                    <Col span={12}>
-                        <NavLink className='accountNavItem' activeClassName='accountNavItemActive' to={`/account/${id}/variablelist`}>
-                            {variables}
+                    </Menu.Item>
+                    <Menu.Item key="logs">
+                        <NavLink to={`/admin/logs`}>
+                            <Icon type="profile" />{logs}
                         </NavLink>
-                    </Col>
-                </Row> */}
-                    <Menu selectedKeys={selectedKeys} mode='horizontal'>
-                        <Menu.Item key="access">
-                            <NavLink to={`/admin/access`}>
-                                <Icon type="usergroup-add" />{access}
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="logs">
-                            <NavLink to={`/admin/logs`}>
-                                <Icon type="profile" />{logs}
-                            </NavLink>
-                        </Menu.Item>
-                    </Menu>
+                    </Menu.Item>
+                </Menu>
             </nav>
             <Switch>
                 <Route path='/admin/access' render={() => <AccessConfig />} />

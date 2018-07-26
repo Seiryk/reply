@@ -1,12 +1,13 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Menu, Dropdown, Icon } from 'antd';
+import { logOut } from '../../../actions/authorizationActions'
 
 
 const menu = (
     <Menu>
       <Menu.Item key="0">
-        <NavLink to='/login'>Выйти</NavLink>
+        <NavLink onClick={() => logOut()} to='/login'>Выйти</NavLink>
       </Menu.Item>
     </Menu>
   );

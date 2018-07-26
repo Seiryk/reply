@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Menu, Col, Icon } from 'antd';
+import { Menu, Icon } from 'antd';
 import Async from 'react-code-splitting';
 import { NavLink, Route, Switch, withRouter } from 'react-router-dom';
 import MailingList from './MailingList/MailingList';
@@ -18,30 +18,18 @@ const Account = ({match: {params: { id }}, history, location: {pathname}}) =>  {
     return (
         <div>
             <nav >
-                {/* <Row>
-                    <Col span={12}>
-                        <NavLink className='accountNavItem' activeClassName='accountNavItemActive' to={`/account/${id}/mailinglist`}>
-                            {mailing}
+                <Menu selectedKeys={selectedKeys} mode='horizontal'>
+                    <Menu.Item key="mailinglist">
+                        <NavLink to={`/account/${id}/mailinglist`}>
+                            <Icon type="mail" />{mailing}
                         </NavLink>
-                    </Col>
-                    <Col span={12}>
-                        <NavLink className='accountNavItem' activeClassName='accountNavItemActive' to={`/account/${id}/variablelist`}>
-                            {variables}
+                    </Menu.Item>
+                    <Menu.Item key="variablelist">
+                        <NavLink to={`/account/${id}/variablelist`}>
+                            <Icon type="setting" />{variables}
                         </NavLink>
-                    </Col>
-                </Row> */}
-                    <Menu selectedKeys={selectedKeys} mode='horizontal'>
-                        <Menu.Item key="mailinglist">
-                            <NavLink to={`/account/${id}/mailinglist`}>
-                                <Icon type="mail" />{mailing}
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="variablelist">
-                            <NavLink to={`/account/${id}/variablelist`}>
-                                <Icon type="setting" />{variables}
-                            </NavLink>
-                        </Menu.Item>
-                    </Menu>
+                    </Menu.Item>
+                </Menu>
             </nav>
             <Switch>
                 <Route path='/account/:id/mailinglist' render={() => <MailingList history={history} title={mailing} id={id} />} />

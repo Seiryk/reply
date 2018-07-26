@@ -1,33 +1,20 @@
-import {Component} from 'react'
-import PropTypes from 'prop-types'
-import {getSessionUser} from '../../../selectors'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import HasNoAccess from '../../Layout/HasNoAccess/HasNoAccess';
+
 
 class BaseAuthorize extends Component {
-
-    static contextTypes = {
-        store: PropTypes.object
-    };
-
-    state = {
-        userRoles: null
+    hasAccess = () => {
+        const {userRoles} = this.props.user;
+        const hasAccess = userRoles.includes(this.props.role);
+        return hasAccess;
     }
-
-    componentDidMount() {
-        const user = getSessionUser(this.context.store.getState());
-        if (user) {
-            this.setState({
-                userRoles: user.userRoles
-            })
-        }
+    render() {
+        if (this.hasAccess()) return this.props.children
+        else return <HasNoAccess />
     }
-
-    hasAccess(allowedRoles) {
-        const {userRoles} = this.state;
-        if (userRoles === null) return null;
-        let hasAccess = userRoles.filter((n) => allowedRoles.includes(n));
-        return (hasAccess.length > 0);
-    }
-
 }
 
-export default BaseAuthorize
+export default connect((state) => ({
+    user: state.authorization.user
+}))(BaseAuthorize)

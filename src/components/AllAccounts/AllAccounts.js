@@ -3,6 +3,7 @@ import { Row, Col } from 'antd';
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
+import {error, emptyError} from '../../utils/constants'
 import notification from '../Layout/notification/notification';
 import Spiner from '../Layout/Spiner/spiner';
 import NewAccountEmptyRow from './NewAccountEmptyRow';
@@ -10,7 +11,7 @@ import AllAccountsTableContent from './AllAccountsTableContent';
 import AddBtn from '../UI/addButton';
 
 import { createAccount, editAccount, deleteAccount, loadAllAccounts } from '../../actions/index'
-import { validation, deleteSelectedItem, makeFieldEditable, closeEditMode } from '../../utils/additionalFunctions'
+import { validation, deleteSelectedItem, makeFieldEditable, closeEditMode, addAccountIdToHeders } from '../../utils/additionalFunctions'
 
 import './style/AllAccounts.less'
 
@@ -40,6 +41,7 @@ class AllAccountsPage extends Component {
     }
     openAccount = ({id}) => {
         this.props.history.push(`/account/${id}/mailinglist`)
+        addAccountIdToHeders(id);
     }
 
     openEmptyRow = () => this.setState({ show: true });
@@ -57,7 +59,7 @@ class AllAccountsPage extends Component {
         const trimAPIkey = APIkey.trim();
         const valid = validation(trimName)
         if ( !trimName.length || !trimAPIkey.length || !valid ) {
-            notification('error', 'Поля пустые или не соответствуют формату');
+            notification(error, emptyError);
         }
         else if (trimName !== el.name || trimAPIkey !== el.APIkey) {
             this.props.editAccount({name: trimName, APIkey: trimAPIkey, id: el.id});
@@ -77,7 +79,7 @@ class AllAccountsPage extends Component {
                 show: true
             })
         }
-        else notification('error', 'Поля пустые или не соответствуют формату');
+        else notification(error, emptyError);
     }
 
     makeEditable = ({id}) => {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import { Button } from 'antd';
 import { withRouter } from 'react-router-dom'
+import {error, dateSizeError, emptyError, quantityBindError, emptyCanditionError, mailingNameError, statuseError} from '../../utils/constants'
 import ConditionBlock from './conditionBlock'
 import MailingName from './mailingName'
 import BindsToCompanies from './bindToCompanies'
@@ -16,6 +17,8 @@ import { getMailingItemConfigurationOptions,
         sendNewMailing,
         addNewBinding,
         changeApplServiceArr } from '../../actions/index'
+
+import moment from 'moment';
 
 import './styles/addMailing.less'
 
@@ -33,21 +36,61 @@ class AddMailind extends Component {
         emptyRowCondition: false,
         emptyRowBinding: false,
         newApplService: null,
+        type: null,
+        additionalDropdowns: [],
         newOperator: null,
         newApplServiceValue: null,
         newCompany: null,
         newDelay: 30,
         editMailingName: !this.props.match.params.id,
     }
+//валидация датапикера что бы минимальное значение не было больше максимального
+    datePickerValidation = (fieldName, {momentStart, momentEnd}, el) => {
+        if(momentStart && momentEnd) {
+            const valid = moment(momentStart, ['DD/MM/YYYY']).isBefore(moment(momentEnd, ['DD/MM/YYYY']));
+            if (!valid) { 
+                notification(error, dateSizeError)
+                return { ...el,[fieldName]: {}}
+            }
+        }
+        if (el) return { ...el,[fieldName]: {momentStart, momentEnd}}
+        else return {momentStart, momentEnd}
+    }
+// обработчик датапикера (записывает выбранное значение в условие)
+    datePickerHandler = (data, fieldName, id) => {
+        if (id) {
+            this.setState(prevState => ({
+                additionalConditions: prevState.additionalConditions.map(el => {
+                    if (el.id === id) return this.datePickerValidation(fieldName, data, el)
+                    else return el
+                }),
+            }))
+        } else this.setState({newApplServiceValue: this.datePickerValidation(fieldName, data)})
+    }
+// так как выбранное значение может иметь разные типы то проверяем на валидность 
+    isNewApplServiceValueIsValid = (value, type) => {
+        let valid;
+        switch (true) {
+            case Array.isArray(value):
+                valid = !!value.length; break;
+            case typeof value === 'object' && value !== null:
+                valid = Object.keys(value).length === 2 && value.momentStart && value.momentEnd ? true : false ; break
+            default:
+                valid = type === 'checkbox' ? true : value;
+        }
+        return valid;
+    }
 
-
+    //  добавление нового условия
     addNewCondition = () => {
-        const { newApplService, newOperator, newApplServiceValue } = this.state;
-        if( newApplService && newOperator && newApplServiceValue ) {
+        const { newApplService, newOperator, type, newApplServiceValue, additionalDropdowns } = this.state;
+        if( newApplService && newOperator && this.isNewApplServiceValueIsValid(newApplServiceValue, type) ) {
             const newCondition = {
                 applService: newApplService,
                 applServiceValue: newApplServiceValue,
                 operator: newOperator,
+                type,
+                additionalDropdowns,
                 id: String(Date.now()),
                 unSaved: true
             }
@@ -56,12 +99,16 @@ class AddMailind extends Component {
                     emptyRowCondition: true,
                     newApplService: null,
                     newOperator: null,
+                    additionalDropdowns: [],
+                    type: null,
                     newApplServiceValue: null,
                 });
         }   
-        else notification('error', 'Поля пустые или не соответствуют формату ')
+        else notification(error, emptyError)
     }
 
+
+    // добавление новой привязки
     addNewBinding = () => {
         const { newDelay, newCompany } = this.state;
         if( newDelay && newCompany ) {
@@ -74,11 +121,12 @@ class AddMailind extends Component {
             this.props.addNewBinding(newBinding);
             this.setState({newCompany: null, emptyRowBinding: true, newDelay: 30});
         }   
-        else notification('error', 'Поля пустые или не соответствуют формату ')
+        else notification(error, emptyError)
     }
     // показывает пустую строку для добавления и привязок и условий
     addEmptyRow = (prop) => this.setState({[prop]: true})
 
+    // делает поле имени возможным редактировать
     makeMailingNameEditable = () => {
         this.setState(prevState => {
             return{
@@ -87,72 +135,161 @@ class AddMailind extends Component {
         })
     }
 
-
+// скрывает строку которая для добавления условия
     closeEmptyRowCondition = () => {
         this.setState({
             emptyRowCondition: false,
             newApplService: null,
             newOperator: null,
+            type: null,
+            additionalDropdowns: [],
             newApplServiceValue: null,
         })
     }
-
+// скрывает строку которая для добавления привязки
     closeEmptyBindingRow = () => this.setState({ emptyRowBinding: false, newCompany: null, newDelay: 30 })
-
+// удаления условия
     removeCondition = (el) => {
         const message = 'условие'
         deleteSelectedItem(el, message, this, this.props.removeCondition);
     }
-
+// удаление привязки
     removeBinding = (el) => {
         const message = 'привязку'
         this.state.bindings.length > 1 ?
         deleteSelectedItem(el, message, this, this.props.removeBinding) : 
-            notification('error', 'У рассылки не может быть меньше одной привязки')
+            notification(error, quantityBindError)
     }
-    // обробатывает дропдауны где добавляются новые элементы
-    changeHandlerForNewVals = (val, name) => {
-        const { applServicesArrays } = this.state
-        if (!applServicesArrays[val] && name === 'newApplService') this.props.changeApplServiceArr(val);
 
+// отображает select который внутри другого select (для старых значений) в форме добавления и редактирования доп. условий
+    showInnerCatalog = ({catalogName, catalogText}, value, id) => {
+        const { applServicesArrays } = this.state;
+        if ( !applServicesArrays[catalogName] ) this.props.changeApplServiceArr(catalogName)
         this.setState(prevState => {
             return {
-                newApplServiceValue: name === 'newApplService' ? 
-                    null :
-                    prevState.newApplServiceValue,
-                [name]: val,
-
-            }
-        })
-        
-
+                additionalConditions: prevState.additionalConditions.map(el => {
+                        if (el.id === id) {
+                                const arr = el.additionalDropdowns ? el.additionalDropdowns:[]
+                                let  additionalDropdowns = [...arr];
+                                additionalDropdowns.push({value, catalog: {catalogName, catalogText}, values: []});
+                                additionalDropdowns = [...additionalDropdowns]
+                            return {...el, additionalDropdowns}
+                        }
+                        else return el
+                    }),
+                }
+        });
     }
-    
-    // обробатывает дропдауны где изменяются старые элементы
-    changeHandlerForOldVals = (val, fieldName, id) => {
+// отображает select который внутри другого select (для новых значений) в форме добавления и редактирования доп. условий
+    showInnerCatalogForNewCondition = ({catalogName, catalogText}, value) => {
         const { applServicesArrays } = this.state;
-        if (!applServicesArrays[val] && fieldName === 'applService') this.props.changeApplServiceArr(val)
+        if ( !applServicesArrays[catalogName] ) this.props.changeApplServiceArr(catalogName)
+        this.setState(prevState => {
+            return {
+                additionalDropdowns: [...prevState.additionalDropdowns, {value, catalog: {catalogName, catalogText}, values: []}]
+                }
+        });
+    }
+// удаляет select который внутри другого select (для старых значений) в форме добавления и редактирования доп. условий
+    deleteInnerCatalog = (value, id) => {
+        this.setState(prevState => {
+            return {
+                additionalConditions: prevState.additionalConditions.map(el => {
+                        if (el.id === id) {
+                            return {
+                                ...el,
+                                additionalDropdowns: el.additionalDropdowns.filter(el => el.value !== value)
+                            }
+                        }
+                        else return el
+                    }),
+                }
+        });
+    }
+// удаляет select который внутри другого select (для новых значений) в форме добавления и редактирования доп. условий
+    deleteInnerCatalogForNewCondition = (value) => {
+        this.setState(prevState => {
+            return {
+                additionalDropdowns: prevState.additionalDropdowns.filter(el => el.value !== value)
+                }
+        });
+    }
+// обробатывается выбранное значение select который внутри другого select (для старых значений) в форме добавления и редактирования доп. условий
+    sabSelectHandler = (name, {selectedVal: values}, id) => {
+        this.setState(prevState => {
+            return {
+                additionalConditions: prevState.additionalConditions.map(el => {
+                        if (el.id === id) {
+                            return {
+                                ...el,
+                                additionalDropdowns: el.additionalDropdowns.map(el => {
+                                    if (el.value === name) return {...el, values}
+                                    else return el
+                                })
+                            }
+                        }
+                        else return el
+                    }),
+                }
+        });
+    }
+// обробатывается выбранное значение select который внутри другого select (для новых значений) в форме добавления и редактирования доп. условий
+    sabSelectHandlerForNewCondition = (name, {selectedVal: values}) => {
+        this.setState(prevState => {
+            return {
+                additionalDropdowns: prevState.additionalDropdowns.map(el => {
+                    if (el.value === name) return {...el, values}
+                    else return el
+                    })
+                }
+        });
+    }
+
+    // обробатывает select где добавляются новые элементы в форме добавления и редактирования доп. условий
+    changeHandlerForNewVals = (fieldName, {type, catalogName, selectedVal}) => {
+        // console.log(catalogName)
+            const { applServicesArrays } = this.state
+            if (!applServicesArrays[selectedVal] && fieldName === 'newApplService' && type === 'select') this.props.changeApplServiceArr(selectedVal);
+
+            this.setState(prevState => {
+                return {
+                    newApplServiceValue: fieldName === 'newApplService' ? null : prevState.newApplServiceValue,
+                    type: fieldName === 'newApplService' ? type : prevState.type,
+                    [fieldName]: selectedVal,
+                    catalogName: catalogName || prevState.catalogName,
+                }
+            })
+        }
+    
+    // обробатывает select где изменяются старые элементы в форме добавления и редактирования доп. условий
+    changeHandlerForOldVals = (fieldName, {selectedVal, catalogName, type}, id) => {
+        const { applServicesArrays } = this.state;
+        if (!applServicesArrays[selectedVal] && fieldName === 'applService' && type === 'select')
+            this.props.changeApplServiceArr(catalogName)
+
         this.setState(prevState => {
             const { additionalConditions, bindings, status } = prevState
             return {
                 additionalConditions: additionalConditions.map(el => {
                         if (el.id === id) {
-                            return {
+                            const editedEl = {
                                 ...el,
                                 applServiceValue: fieldName === 'applService' ? null : el.applServiceValue,
-                                [fieldName]: val
+                                [fieldName]: selectedVal,
+                                catalogName: catalogName || el.catalogName,
+                                type: fieldName === 'applService' ? type : el.type,
                             }
+                            return editedEl
                         }
                         else return el
                     }),
                     bindings: bindings.map(el => {
-                        if (el.id === id) return { ...el, [fieldName]: val }
+                        if (el.id === id) return { ...el, [fieldName]: selectedVal }
                         else return el
                     }),
-                    status: fieldName === 'statuses' ? val : status
+                    status: fieldName === 'statuses' ? selectedVal : status
                 }
         });
-        
     }
 
     // проверяет заполнено ли поле applServiceValue (так как оно в процессе редактирования может стать путым)
@@ -165,15 +302,15 @@ class AddMailind extends Component {
         return valid
     }
 
-    
+    // подготовка данных для отправки на сервер
     submitHandler = () => {
         const { additionalConditions, status, bindings, mailingName } = this.state;
         const isValid = this.chekValidity(additionalConditions);
         const mailing =  { additionalConditions, status, bindings, mailingName };
-        if (!mailingName)  notification('error', 'Название рассылки не должно быть пустым')
-        else if (!status)  notification('error', 'Статус рассылки не должен быть пустым')
-        else if (!isValid)  notification('error', 'Все поля в условиях должны быть заполненны')
-        else if (!bindings.length)  notification('error', 'Должна быть миннимум одна привязка')
+        if (!mailingName)  notification(error, mailingNameError)
+        else if (!status)  notification(error, statuseError)
+        else if (!isValid)  notification(error, emptyCanditionError)
+        else if (!bindings.length)  notification(error, quantityBindError)
         else this.props.sendNewMailing(mailing)
     }
 
@@ -191,6 +328,13 @@ class AddMailind extends Component {
                         changeHandlerForNewVals={this.changeHandlerForNewVals}
                         makeMailingNameEditable={this.makeMailingNameEditable} />
                     <ConditionBlock
+                        datePickerHandler={this.datePickerHandler}
+                        showInnerCatalog={this.showInnerCatalog}
+                        sabSelectHandler={this.sabSelectHandler}
+                        sabSelectHandlerForNewCondition={this.sabSelectHandlerForNewCondition}
+                        deleteInnerCatalog={this.deleteInnerCatalog}
+                        deleteInnerCatalogForNewCondition={this.deleteInnerCatalogForNewCondition}
+                        showInnerCatalogForNewCondition={this.showInnerCatalogForNewCondition}
                         statuses={statuses}
                         status={status}
                         addEmptyRow={this.addEmptyRow}

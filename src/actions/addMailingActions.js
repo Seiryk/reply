@@ -28,7 +28,7 @@ export const getMailingItemConfigurationOptions = (id) => dispatch => {
   }
 
 export const sendNewMailing = (data) => dispatch => {
-    console.log(data);
+    // console.log(data);
     // api.post(arg, 'url', (resp) => {
     //     alert('user added');
 

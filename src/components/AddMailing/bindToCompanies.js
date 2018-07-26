@@ -52,7 +52,7 @@ const ConditionBlock = (props) => {
                                     name='delay'
                                     min={1}
                                     placeholder={'Задержка'}
-                                    onChange={(e) => changeHandlerForOldVals(e.target.value, e.target.name, el.id )}
+                                    onChange={(e) => changeHandlerForOldVals(e.target.value, e.target.name, null, el.id )}
                                     value = {el.delay} />
                                 </Col>
                                 <Col offset={4} span={4}>

@@ -1,6 +1,7 @@
 @import './variables.less';
 
 body{
+    font-family: sans-serif;
     margin: 0px;
     padding: 0px;
     font-size: 14px;
@@ -36,5 +37,27 @@ section{
 }
 
 .customDropDown .ant-select-selection {
-    border: 1px solid red
+    border: 1px solid @red
+}
+
+// unAutheticated page
+.unAutheticatedPageWraper{
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    p{
+        width: 300px;
+        color: @blue;
+        height: 40px;
+        font-size: 50px
+    }
+    button{
+        width: 300px;
+        border-color: @blue;
+        color: @blue;
+
+    }
 }

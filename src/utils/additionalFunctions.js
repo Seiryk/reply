@@ -1,4 +1,7 @@
 import { Modal } from 'antd';
+import axios from 'axios';
+import JWTDecode from 'jwt-decode';
+
 const confirm = Modal.confirm;
 
 
@@ -9,12 +12,7 @@ const confirm = Modal.confirm;
  * @returns {*}
  */
 export function parseJwt(token) {
-    if (typeof token === 'undefined') return null;
-    let base64Url = token.split('.')[1];
-    if (typeof base64Url === 'undefined') return null;
-    let base64 = base64Url.replace('-', '+').replace('_', '/');
-    if (typeof base64 === 'undefined') return null;
-    return window.atob(base64);
+    return JSON.stringify(JWTDecode(token));
 };
 
 
@@ -82,4 +80,13 @@ export const closeEditMode = (context, nameStateProp) => {
           [nameStateProp]: prevState[nameStateProp].map(el => ({...el, edit: false})),
       }
   })
+}
+// добавляем токин в хедер
+export const addBaseAxiosSettings = () => {
+    axios.defaults.headers.common['Authorisation'] = `Bearer ${window.localStorage.getItem('token')}`
+}
+
+//добавляем id внутреннего аккаунта с рассылками в хедер
+export const addAccountIdToHeders = (id) => {
+    axios.defaults.headers.common['X-Reply-Account-Id'] = id
 }

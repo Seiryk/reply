@@ -1,20 +1,19 @@
 import { Component } from 'react';
 import {connect} from 'react-redux';
-import {ROLE_ADMIN, ROLE_RESP} from "../../constants";
-import {getUserRoles} from "../../selectors/users";
+import {ROLE_ADMIN, ROLE_RESP} from "../../utils/constants";
 
 class HasRole extends Component {
 
     render() {
-        const { children, currentUserRole, requiredRole } = this.props;
-        if (!currentUserRole.includes(requiredRole)) return null;
+        const { children, userRoles, requiredRole } = this.props;
+        if (!userRoles.includes(requiredRole)) return null;
         return children;
     }
 
 }
 const getMapStateToProps = (extendWith = {}) => state => {
     return {
-        currentUserRole: getUserRoles(state),
+        userRoles: state.authorization.user.userRoles,
         ...extendWith
     };
 };

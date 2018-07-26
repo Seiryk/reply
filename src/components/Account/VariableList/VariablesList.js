@@ -99,7 +99,7 @@ class VariablesList extends Component {
             <div>
                
                 {
-                    loading ? <Spiner />: 
+                    loading ? <Spiner /> : 
                     <React.Fragment>
                         <h1 className='title'>{title}</h1>
                         <div className='tableWraper'>

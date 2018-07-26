@@ -19,48 +19,75 @@ export const olddata = {
         {
             text: 'applService 1',
             value: 'applService_1',
+            type: 'checkbox'
         },
         {
             text: 'applService 2',
             value: 'applService_2',
+            catalogName: 'applService_2',
+            type: 'multiple'
         },
         {
             text: 'applService 3',
             value: 'applService_3',
+            catalogName: 'applService_3',
+            type: 'select'
         },
         {
             text: 'applService 4',
             value: 'applService_4',
+            type: 'input'
         },
         {
             text: 'applService 5',
             value: 'applService_5',
+            catalogName: 'applService_5',
+            type: 'select'
+        },
+        {
+            text: 'applService 6',
+            value: 'applService_6',
+            catalogName: 'applService_6',
+            type: 'multiple'
+        },
+        {
+            text: 'applService 7',
+            value: 'applService_7',
+            type: 'dataPicker'
         },
     ],
     additionalConditions: [
         {
             applService: 'applService_1',
-            applServiceValue: 'other_appl_service_1',
+            applServiceValue: true,
+            catalogName: null,
             operator: 'equal',
-            id: '87'
+            id: '87',
+            type: 'checkbox',
         },
         {
             applService: 'applService_2',
-            applServiceValue: 'for_appl_service_2',
+            applServiceValue: ['additional_service_2'],
             operator: 'not equal',
-            id: '4234'
+            catalogName: 'applService_2',
+            id: '4234',
+            type: 'multiple'
         },
         {
             applService: 'applService_3',
             applServiceValue: 'other_appl_service_3',
             operator: 'equal',
-            id: '234'
+            catalogName: 'applService_3',
+            id: '234',
+            type: 'select'
         },
         {
             applService: 'applService_4',
-            applServiceValue: 'applServiceValue_4',
+            applServiceValue: 'applServiceValue 4',
             operator: 'not equal',
-            id: '53'
+            catalogName: null,
+            id: '53',
+            type: 'input'
         },
     ],
     operators: [
@@ -86,12 +113,20 @@ export const olddata = {
         ],
         applService_2: [
             {
-                text: 'text for appl service2',
-                value: 'for_appl_service_2'
+                text: 'appl service2',
+                value: 'additional_service_2',
+                catalogName: 'iner_catalog',
+                catalogText: 'Партнеры'
             },
             {
                 text: 'other for appl service2',
                 value: 'other_appl_service_2'
+            },
+            {
+                text: 'same value',
+                value: 'same_val',
+                catalogName: 'outer_catalog',
+                catalogText: 'Сотрудники'
             }
         ],
         applService_3: [
@@ -104,7 +139,16 @@ export const olddata = {
                 value: 'other_appl_service_3'
             }
         ],
-        applService_4: [],
+        applService_6: [
+            {
+                text: 'text for appl service 6',
+                value: 'for_appl_service_6'
+            },
+            {
+                text: 'other for appl service 6',
+                value: 'other_appl_service_6'
+            }
+        ]
     },
     companies: [
         {
@@ -155,22 +199,41 @@ export const newdata = {
         {
             text: 'applService 1',
             value: 'applService_1',
+            type: 'checkbox'
         },
         {
             text: 'applService 2',
             value: 'applService_2',
+            catalogName: 'applService_2',
+            type: 'multiple'
         },
         {
             text: 'applService 3',
             value: 'applService_3',
+            catalogName: 'applService_3',
+            type: 'select'
         },
         {
             text: 'applService 4',
             value: 'applService_4',
+            type: 'input'
         },
         {
             text: 'applService 5',
             value: 'applService_5',
+            catalogName: 'applService_5',
+            type: 'select'
+        },
+        {
+            text: 'applService 6',
+            value: 'applService_6',
+            catalogName: 'applService_6',
+            type: 'multiple'
+        },
+        {
+            text: 'applService 7',
+            value: 'applService_7',
+            type: 'dataPicker'
         },
     ],
     additionalConditions: [],
@@ -197,12 +260,20 @@ export const newdata = {
         ],
         applService_2: [
             {
-                text: 'text for appl service2',
-                value: 'for_appl_service_2'
+                text: 'appl service2',
+                value: 'additional_service_2',
+                catalogName: 'iner_catalog',
+                catalogText: 'Партнеры'
             },
             {
                 text: 'other for appl service2',
                 value: 'other_appl_service_2'
+            },
+            {
+                text: 'same value',
+                value: 'same_val',
+                catalogName: 'outer_catalog',
+                catalogText: 'Сотрудники'
             }
         ],
         applService_3: [
@@ -215,7 +286,16 @@ export const newdata = {
                 value: 'other_appl_service_3'
             }
         ],
-        applService_4: [],
+        applService_6: [
+            {
+                text: 'text for appl service 6',
+                value: 'for_appl_service_6'
+            },
+            {
+                text: 'other for appl service 6',
+                value: 'other_appl_service_6'
+            }
+        ]
     },
     companies: [
         {
