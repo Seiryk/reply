@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
+import {connect} from 'react-redux'
 import { Icon } from 'antd';
 import UserDetails from '../userDetails/userDetails'
 import { IsAdmin } from '../../Security/HasRole'
 import '../styles/header.less'
 
-export default class Header extends Component {
+class Header extends Component {
     render() {
         return (
             <header >
@@ -14,9 +15,12 @@ export default class Header extends Component {
                     <IsAdmin>
                         <NavLink to='/admin/access' ><Icon className="settings" type="setting"/></NavLink>
                     </IsAdmin>
-                    <UserDetails />
+                    <UserDetails userName={this.props.user.username} />
                 </div>
             </header>
         )
     }
 }
+export default connect(state => ({
+    user: state.authorization.user
+}))(Header)

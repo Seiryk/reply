@@ -69,7 +69,6 @@ export const updateUserAccessGroups = ({name, value}) => (dispatch) => {
 }
 
 export const getlogsList = (dateObj) => (dispatch) => {
-    console.log('acacacac')
     dispatch({ type: ACCESS_GROUP_LOADER});
         setTimeout(()=> {
             dispatch({ type: GET_LOGS_LIST + SUCCESS,

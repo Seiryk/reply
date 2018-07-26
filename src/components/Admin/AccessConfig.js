@@ -58,7 +58,7 @@ class AccessConfig extends Component {
         this.props.updateUserAccessGroups(selectedUserForAdding);
     }
 
-    dropdownHandleChange = (value, name) => {
+    dropdownHandleChange = (name, {selectedVal: value}) => {
         this.setState({
             selectedUserForAdding: {name, value}
         })

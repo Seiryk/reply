@@ -18,10 +18,9 @@ class ConditionBlock extends React.Component {
             case 'input':
                 return <Input
                     name={name}
-                    // style={{width: '244px', ...(el.applServiceValue ? {} : errorStyle) }}
-                    style={{width: '244px'}}
+                    style={{width: '244px', ...(el.applServiceValue ? {} : errorStyle) }}
                     placeholder='Введите значение'
-                    onChange={(e) => changeHandlerForOldVals(e.target.value, e.target.name, el.type, el.id)} 
+                    onChange={(e) => changeHandlerForOldVals(e.target.name, {selectedVal: e.target.value, type: el.type}, el.id)} 
                     value={el.applServiceValue} />
             case 'multiple':
                 return  <React.Fragment>
@@ -48,7 +47,7 @@ class ConditionBlock extends React.Component {
                     className='checkboxMailing'
                     checked={el.applServiceValue || undefined}
                     name={name}
-                    onChange={(e) => changeHandlerForOldVals(e.target.checked, e.target.name, el.type, el.id)} />
+                    onChange={(e) => changeHandlerForOldVals(e.target.name, {selectedVal: e.target.checked, type: el.type}, el.id)} />
             default:
                 return <Dropdown
                     defaultValue={el.applServiceValue || undefined}

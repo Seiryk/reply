@@ -21,7 +21,7 @@ class EmptyRowCondition extends React.Component {
                     name={name}
                     placeholder='Введите значение'
                     disabled={values.newApplService? false : true} 
-                    onChange={e => changeHandlerForNewVals(e.target.value, e.target.name)} 
+                    onChange={e => changeHandlerForNewVals(e.target.name, {selectedVal: e.target.value} ) }
                     value={values.newApplServiceValue} 
                     style={{width: '244px'}}/>
             case 'multiple':
@@ -48,7 +48,7 @@ class EmptyRowCondition extends React.Component {
                     className='checkboxMailing'
                     checked={values.newApplServiceValue || undefined}
                     name={name}
-                    onChange={e => changeHandlerForNewVals(e.target.checked, e.target.name)} />
+                    onChange={e => changeHandlerForNewVals(e.target.name, {selectedVal: e.target.checked} )} />
             default:
                 return <Dropdown
                     disabled={values.newApplService ? false : true}

@@ -19,6 +19,7 @@ class dataPicker extends React.Component{
     render () {
         const { defaultValue } = this.props;
         const datePick = (valName) => <DatePicker
+            className={ defaultValue && defaultValue.momentStart && defaultValue.momentEnd ? '': 'customDatapicker' }
             style={{width: 110}}
             format={dateFormat}
             placeholder='Значение'

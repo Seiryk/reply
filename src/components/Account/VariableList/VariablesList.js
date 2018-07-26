@@ -86,7 +86,7 @@ class VariablesList extends Component {
 
     showEmptyVariableRow = () => this.setState({emptyVariableRow: true});
 
-    dropdownHandleChange = (val, name) => {
+    dropdownHandleChange = (name, {selectedVal: val}) => {
         this.setState({
             [name]: val
         })

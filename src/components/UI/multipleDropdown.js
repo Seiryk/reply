@@ -22,14 +22,14 @@ export default class Dropdown extends Component {
 
     }
     render() {
-        const { options = [], width, defaultValue=[], disabled = false, } = this.props;
+        const { options = [], width, defaultValue=[], name, disabled = false, } = this.props;
         const isDefaultValue = defaultValue || [];
         return (
             <div>
                 <Select
                     mode='multiple'    
                     disabled={disabled}
-                    //  className={isDefaultValue.length ? '': 'customDropDown' }
+                    className={!isDefaultValue.length && name === 'applServiceValue' ? 'customDropDown': '' }
                     value={isDefaultValue}
                     onSelect={this.handlerOnSelect}
                     onDeselect={this.handlerOnDeselect}

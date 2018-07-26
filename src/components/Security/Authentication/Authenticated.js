@@ -44,30 +44,31 @@ class Authenticated extends Component {
         if (this.checkUserIsAunthenticated()) {
             authenticated();
             addBaseAxiosSettings();
-        }
+        } 
     }
 
     render() {
         if (!this.checkUserIsAunthenticated()) {
-            return null;
+            window.localStorage.removeItem('user');
+            this.props.history.push('/login');
+        }else{
+            return (
+                <div>
+                    <Header />
+                    <section>
+                        <Switch>
+                            <Route path="/account/:id" component={RouteAccount}/>
+                            <Route path="/admin/" component={RouteAdminPage}/>
+                            <Route path='/mailing/add' component={RouteAddMailing} />
+                            <Route path='/mailing/edit/:id' component={RouteAddMailing} />
+                            <Route path="/" exact component={RouteAllAccounts}/>
+                            <Route path="*" component={PageNotFound} />
+                        </Switch>
+                    </section>
+                    <Footer />
+                </div>
+            )
         }
-
-        return (
-            <div>
-                <Header />
-                <section>
-                    <Switch>
-                        <Route path="/account/:id" component={RouteAccount}/>
-                        <Route path="/admin/" component={RouteAdminPage}/>
-                        <Route path='/mailing/add' component={RouteAddMailing} />
-                        <Route path='/mailing/edit/:id' component={RouteAddMailing} />
-                        <Route path="/" exact component={RouteAllAccounts}/>
-                        <Route path="*" component={PageNotFound} />
-                    </Switch>
-                </section>
-                <Footer />
-            </div>
-        )
     }
 
 }

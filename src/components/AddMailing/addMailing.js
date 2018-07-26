@@ -75,10 +75,12 @@ class AddMailind extends Component {
                 valid = !!value.length; break;
             case typeof value === 'object' && value !== null:
                 valid = Object.keys(value).length === 2 && value.momentStart && value.momentEnd ? true : false ; break
+            case typeof value === 'string':
+                valid = value.trim(); break
             default:
-                valid = type === 'checkbox' ? true : value;
+                valid = type === 'checkbox' ? true : value ;
         }
-        return valid;
+        return !!valid;
     }
 
     //  добавление нового условия
@@ -253,7 +255,7 @@ class AddMailind extends Component {
 
             this.setState(prevState => {
                 return {
-                    newApplServiceValue: fieldName === 'newApplService' ? null : prevState.newApplServiceValue,
+                    newApplServiceValue: fieldName !== 'newApplService' ? prevState.newApplServiceValue : type === 'checkbox' ? false : null,
                     type: fieldName === 'newApplService' ? type : prevState.type,
                     [fieldName]: selectedVal,
                     catalogName: catalogName || prevState.catalogName,
@@ -274,7 +276,7 @@ class AddMailind extends Component {
                         if (el.id === id) {
                             const editedEl = {
                                 ...el,
-                                applServiceValue: fieldName === 'applService' ? null : el.applServiceValue,
+                                applServiceValue: fieldName !== 'applService' ? el.applServiceValue : type === 'checkbox' ? false : null,
                                 [fieldName]: selectedVal,
                                 catalogName: catalogName || el.catalogName,
                                 type: fieldName === 'applService' ? type : el.type,
@@ -294,9 +296,10 @@ class AddMailind extends Component {
 
     // проверяет заполнено ли поле applServiceValue (так как оно в процессе редактирования может стать путым)
     chekValidity = (arr) => {
+        console.log(arr)
         let valid = true;
         arr.forEach(el => {
-            if (!el.applServiceValue) valid = false;
+            if (!this.isNewApplServiceValueIsValid(el.applServiceValue, el.type)) valid = false;
             return
         });
         return valid
@@ -311,7 +314,7 @@ class AddMailind extends Component {
         else if (!status)  notification(error, statuseError)
         else if (!isValid)  notification(error, emptyCanditionError)
         else if (!bindings.length)  notification(error, quantityBindError)
-        else this.props.sendNewMailing(mailing)
+        // else this.props.sendNewMailing(mailing)
     }
 
     render() {

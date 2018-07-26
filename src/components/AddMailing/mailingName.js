@@ -17,7 +17,7 @@ const MailingName = (props) => {
                 editMailingName ? <Input 
                     name='mailingName' 
                     placeholder={'Название расылки'}
-                    onChange={(e) => changeHandlerForNewVals(e.target.value, e.target.name)} 
+                    onChange={(e) => changeHandlerForNewVals(e.target.name, {selectedVal: e.target.value})} 
                     value = {mailingName} /> : <p>{mailingName}</p>
             }
             </div>

@@ -3,7 +3,7 @@ import { Row, Col } from 'antd';
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import {error, emptyError} from '../../utils/constants'
+import {error, emptyError, formatError} from '../../utils/constants'
 import notification from '../Layout/notification/notification';
 import Spiner from '../Layout/Spiner/spiner';
 import NewAccountEmptyRow from './NewAccountEmptyRow';
@@ -35,7 +35,7 @@ class AllAccountsPage extends Component {
                     deleteAccount={this.deleteAccount}
                     makeEditable={this.makeEditable}
                     editAccount={this.editAccount}
-                    closeEditMode={this.editAccount}
+                    closeEditMode={this.closeEditMode}
                 />
         ))
     }
@@ -59,7 +59,7 @@ class AllAccountsPage extends Component {
         const trimAPIkey = APIkey.trim();
         const valid = validation(trimName)
         if ( !trimName.length || !trimAPIkey.length || !valid ) {
-            notification(error, emptyError);
+            notification(error, emptyError + formatError);
         }
         else if (trimName !== el.name || trimAPIkey !== el.APIkey) {
             this.props.editAccount({name: trimName, APIkey: trimAPIkey, id: el.id});
@@ -79,7 +79,7 @@ class AllAccountsPage extends Component {
                 show: true
             })
         }
-        else notification(error, emptyError);
+        else notification(error, emptyError + formatError);
     }
 
     makeEditable = ({id}) => {

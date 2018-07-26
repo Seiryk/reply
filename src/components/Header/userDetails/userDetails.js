@@ -16,7 +16,7 @@ const userDetails = (props) => {
     return(
         <Dropdown overlay={menu} trigger={['click']}>
             <p className='userName'>
-                user <Icon style={{color: 'white'}} type="down" />
+                {props.userName} <Icon style={{color: 'white'}} type="down" />
             </p>
         </Dropdown>
     )

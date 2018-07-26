@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { DatePicker, Col, Row, Button, Icon  } from 'antd';
 import { getlogsList } from '../../actions/index'
+import { error, dateSizeError } from '../../utils/constants'
+import notification from '../Layout/notification/notification'
 
 import moment from 'moment';
 
@@ -24,7 +26,10 @@ class LogsList extends Component {
 
     applyFilter = () => {
         const { momentStart, momentEnd } = this.state;
-        this.props.getlogsList({momentStart, momentEnd});
+        const valid = moment(momentStart, ['DD/MM/YYYY']).isBefore(moment(momentEnd, ['DD/MM/YYYY']));
+            if (!valid) { 
+                notification(error, dateSizeError)
+            } else this.props.getlogsList({momentStart, momentEnd});
     }
 
     componentDidMount () {

@@ -54,6 +54,7 @@ export const ROLE_ADMIN = 'ROLE_ADMIN';
 
 // error messages variables
 export const error = 'error'
+export const formatError = 'и соответствовать формату'
 export const emptyError  = 'Все поля должны быть заполнены'
 export const emptyCanditionError  = 'Все поля в условиях должны быть заполненны'
 export const statuseError  = 'Статус рассылки не должен быть пустым'

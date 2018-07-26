@@ -21,7 +21,7 @@ const emptyRowBindings = (props) =>  {
                             name='newDelay'
                             min={1}
                             placeholder={'Задержка'}
-                            onChange={(e) => changeHandlerForNewVals(e.target.value, e.target.name )}
+                            onChange={(e) => changeHandlerForNewVals(e.target.name, {selectedVal: e.target.value} )}
                             value = {values.newDelay} />
                     </Col>
                     <Col offset={4} span={4}>
