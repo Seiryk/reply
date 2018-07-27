@@ -55,6 +55,7 @@ const vars = {
     ]
 }
 
+// создание пользовательской переменной
 export const createVariable = (arg) => dispatch => {
     console.log(arg)
     const data = {
@@ -80,6 +81,8 @@ export const createVariable = (arg) => dispatch => {
     //     console.log(err);
     //   });
 }
+
+//  получение всех пользовательских переменных
 export const loadAllVariables = () => dispatch => {
     // api.post(arg, 'url', (resp) => {
     //     alert('user added');
@@ -94,6 +97,7 @@ export const loadAllVariables = () => dispatch => {
     //   });
 }
 
+// удаление пользовательской переменной
 export const deleteVariable = (id) => dispatch => {
     console.log(id)
     // api.post(id, 'url', (resp) => {
@@ -108,6 +112,7 @@ export const deleteVariable = (id) => dispatch => {
     //   });
 }
 
+// редактирование переменной
 export const editVariable = (arg) => dispatch => {
     console.log(arg)
     const data = {

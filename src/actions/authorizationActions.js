@@ -1,13 +1,5 @@
-import {UNAUTHENTICATED, AUTHENTICATED, BACK_HOST} from "../utils/constants";
-/**
- * Попытка выполнения действия требующего аутентификации без её наличия
- * @returns {{type}}
- */
-export function unAuthenticated() {
-    return {
-        type: UNAUTHENTICATED
-    }
-}
+import { AUTHENTICATED, BACK_HOST} from "../utils/constants";
+
 
 /**
  * Пользователь нажал кнопку Login

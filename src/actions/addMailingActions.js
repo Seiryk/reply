@@ -11,7 +11,7 @@ import {newdata, olddata} from './data'
 
 
 
-
+//  получение базовых конфигураций для настройки рассылки
 export const getMailingItemConfigurationOptions = (id) => dispatch => {
     // api.post(arg, 'url', (resp) => {
     //     alert('user added');
@@ -27,6 +27,7 @@ export const getMailingItemConfigurationOptions = (id) => dispatch => {
     //   });
   }
 
+//   отправка новой рассылки
 export const sendNewMailing = (data) => dispatch => {
     // console.log(data);
     // api.post(arg, 'url', (resp) => {
@@ -50,6 +51,8 @@ export const sendNewMailing = (data) => dispatch => {
         value: 'new_other_appl_service_5'
     }
 ]
+
+// добавление каталогов 
 export const changeApplServiceArr = (val) => (dispatch) => {
     dispatch({ type: MAILING_CONFIGURATION_OPTIONS_LOADER});
     setTimeout(()=> {
@@ -57,15 +60,15 @@ export const changeApplServiceArr = (val) => (dispatch) => {
         dispatch({ type: GET_NEW_SERVICE_ARR + SUCCESS, data: obj });
     },2000) 
 }
-
+// добавление условия
 export const addNewCondition = (obj) => (dispatch) => {
     dispatch({ type: ADD_NEW_CONDITION + SUCCESS, data: obj });
 }
-
+// добавление приязки
 export const addNewBinding = (obj) => (dispatch) => {
     dispatch({ type: ADD_NEW_BINDING + SUCCESS, data: obj });
 }
-
+// удаление условия
 export const removeCondition = ({id, unSaved}) => (dispatch) => {
     if (unSaved) {
         dispatch({ type: REMOVE_CONDITION + SUCCESS, data: id });
@@ -76,7 +79,7 @@ export const removeCondition = ({id, unSaved}) => (dispatch) => {
         },2000)
     }
 }
-
+// удаление привязки
 export const removeBinding = ({id, unSaved}) => (dispatch) => {
     if (unSaved) {
         dispatch({ type: REMOVE_BINDING + SUCCESS, data: id });

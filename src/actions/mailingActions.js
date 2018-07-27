@@ -23,6 +23,8 @@ const arr = [
 
   },
 ];
+
+// получение списка рассылок
 export const getMailingItems = (arg) => dispatch => {
 //   console.log(arg)
   // api.post(arg, 'url', (resp) => {
@@ -37,6 +39,8 @@ export const getMailingItems = (arg) => dispatch => {
   //     console.log(err);
   //   });
 }
+
+// удаление рассылки
 export const deleteMailingItem = (arg) => dispatch => {
   console.log(arg)
   // api.post(arg, 'url', (resp) => {

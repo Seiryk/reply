@@ -11,7 +11,8 @@ import  AddBtn  from '../../UI/addButton'
 class MailingList extends Component {
 
     editMailingItem = ({id}) => {
-        this.props.history.push('/mailing/edit/' + id)
+        const {accountId} = this.props;
+        this.props.history.push('/account/'+accountId+'/mailing/edit/' + id)
     }
     deleteMailingItem = ({id}) => {
         const message = 'рассылку';
@@ -19,12 +20,13 @@ class MailingList extends Component {
     }
 
     addNewMailing = () => {
-        this.props.history.push('/mailing/add')
+        const {accountId} = this.props;
+        this.props.history.push('/account/'+accountId+'/mailing/add')
     }
 
     componentDidMount(){
-        const { id, getMailingItems } = this.props;
-        getMailingItems(id);
+        const { accountId, getMailingItems } = this.props;
+        getMailingItems(accountId);
     }
     render() {
         const { loading, mailingList,  title } = this.props;
@@ -82,7 +84,7 @@ export default connect(mapStateToProps, {
 
 MailingList.propTypes = {
     deleteMailingItem: PropTypes.func,
-    id: PropTypes.string,
+    accountId: PropTypes.string,
     title: PropTypes.string,
     getMailingItems: PropTypes.func,
     loading: PropTypes.bool,

@@ -4,17 +4,19 @@ import { connect } from 'react-redux';
 import { Row, Col, Menu, Icon } from 'antd'
 import { loadAllAccesses, loadAccessGroup, deleteUser, updateUserAccessGroups } from '../../actions/index'
 import Spiner from '../Layout/Spiner/spiner'
-import Dropdown from '../UI/dropdown'
+import ConfigurationUsersAccess from './ConfigurationUsersAccess'
+import ShowAccessSavedAccouns from './ShowAccessSavedAccouns'
 import { deleteSelectedItem } from '../../utils/additionalFunctions'
 
-const accessGroupLoader = <Icon className='iconStyle accessGroupLoader' type="loading" />
+const accessGroupLoader = <Icon className='iconStyle accessGroupLoaderAccess' type="loading" />
 
 class AccessConfig extends Component {
     state = {selectedUserForAdding: {}}
+    //  отображение меню с доступами
     renderListOfAccesses = (allAccesses) => {
         return allAccesses.map(el => {
             return (
-                <Menu.Item
+                <Menu.Item title={el.text} className='accessMenuItem'
                     onClick={() => this.loadAccessGroup(el.value)}
                     key={el.value}>
                         <Icon type="user-add" />{el.text}
@@ -28,18 +30,7 @@ class AccessConfig extends Component {
             this.setState({selectedUserForAdding: {}})
         }
     }
-
-    renderAccessGroup = () => {
-        const { allAccessGroups, activeAccessGroup } = this.props;
-        return allAccessGroups[activeAccessGroup].map(el => {
-            return (
-                <div key={el.id}>
-                    <span>{el.name}</span>
-                     <Icon onClick={() => this.deleteUser(el.id, activeAccessGroup)} className='accessIconStyle' type="delete" />
-                </div>
-            )
-        })
-    }
+    // удаление пользователя из списка пользователей определенного доступа
     deleteUser = (id, accessGroup) => {
         const obj = {id, accessGroup};
         const message = 'пользователя';
@@ -48,16 +39,16 @@ class AccessConfig extends Component {
     componentDidMount() {
         this.props.loadAllAccesses();        
     }
-
+// получение списка пользователей определенного доступа
     loadAccessGroup = (groupName) => {
         this.props.loadAccessGroup(groupName);
     }
-
+ // добавление пользователя в список пользователей определенного доступа
     addNewUserAccess = () => {
         const {selectedUserForAdding} = this.state;
         this.props.updateUserAccessGroups(selectedUserForAdding);
     }
-
+// оброботчик селекта
     dropdownHandleChange = (name, {selectedVal: value}) => {
         this.setState({
             selectedUserForAdding: {name, value}
@@ -65,14 +56,28 @@ class AccessConfig extends Component {
     }
 
     render() {
-        const { loading, allAccesses, accessGroupLoading, activeAccessGroup, accessUsers } = this.props;
+        const { loading, allAccesses, accessGroupLoading, activeAccessGroup, allAccessGroups, accessUsers } = this.props;
         const { selectedUserForAdding } = this.state;
+        const RenderContent = activeAccessGroup === 'accessSavedAccouns' ?
+                                                    <ShowAccessSavedAccouns
+                                                        activeAccessGroup={activeAccessGroup}
+                                                        allAccessGroups={allAccessGroups}
+                                                    /> : 
+                                                    <ConfigurationUsersAccess
+                                                        selectedUserForAdding={selectedUserForAdding}
+                                                        accessGroupLoading={accessGroupLoading}
+                                                        accessUsers={accessUsers}
+                                                        activeAccessGroup={activeAccessGroup}
+                                                        allAccessGroups={allAccessGroups}
+                                                        deleteUser={this.deleteUser}
+                                                        addNewUserAccess={this.addNewUserAccess}
+                                                        dropdownHandleChange={this.dropdownHandleChange}/>
         return (
             <div>
                 {
                     loading ? <Spiner/> : 
                     <Row>
-                        <Col span={4}>
+                        <Col span={7}>
                             <div className='listOfAccesses'>
                                 <Menu
                                     selectedKeys={[activeAccessGroup]}
@@ -81,32 +86,10 @@ class AccessConfig extends Component {
                                 </Menu>
                             </div>
                         </Col>
-                        <Col offset={1} span={9}>
-                            <div className='accessGroupName'>
-                                {
-                                    accessGroupLoading ? accessGroupLoader : 
-                                    !!activeAccessGroup ? this.renderAccessGroup() : null
-                                }
-                            </div>
-                        </Col>
-                        <Col offset={1} span={9}>
-                            {activeAccessGroup ? <div className='addNewUserAccess'>
-                                <h1>Добавить сотрудника</h1>
-                                <div style={{marginLeft: 20}}>
-                                    <Dropdown defaultValue={selectedUserForAdding.value} 
-                                        name={activeAccessGroup} 
-                                        dropdownHandleChange={this.dropdownHandleChange} 
-                                        options={accessUsers} width={200} />
-                                </div>                           
-                                <div className='icons'>
-                                    {Object.keys(selectedUserForAdding).length ?
-                                        <Icon
-                                            className='iconStyle'  
-                                            type="check"
-                                            onClick={this.addNewUserAccess} /> : null}
-                                </div>
-                            </div> : null}
-                        </Col>
+                        {
+                            accessGroupLoading ? accessGroupLoader : RenderContent
+                        }
+
                     </Row>
                 }
             </div>

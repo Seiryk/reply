@@ -8,7 +8,7 @@ import notification from '../Layout/notification/notification'
 
 import moment from 'moment';
 
-const accessGroupLoader = <Icon className='iconStyle accessGroupLoader' type="loading" />
+const accessGroupLoader = <Icon className='iconStyle accessGroupLoaderLogs' type="loading" />
 
 const dateFormat = 'DD/MM/YYYY';
 const presentDate = new Date(Date.now());

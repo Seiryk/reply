@@ -7,9 +7,10 @@ import PageNotFound from '../Layout/pageNotFound/pageNotFound';
 
 import './styles/account.less'
 
-const VariablesList = () => <Async load={import('./VariableList/VariablesList')} />;
+const VariablesList = (props) => <Async load={import('./VariableList/VariablesList')} />;
 
-const Account = ({match: {params: { id }}, history, location: {pathname}}) =>  {
+const Account = (props) =>  {
+    const {match: {params: { accountId }}, history, location: {pathname}} = props;
     let currentLinkArr = pathname.split('/');
     const currentLink = currentLinkArr[currentLinkArr.length - 1];
     const selectedKeys = [currentLink];
@@ -20,20 +21,20 @@ const Account = ({match: {params: { id }}, history, location: {pathname}}) =>  {
             <nav >
                 <Menu selectedKeys={selectedKeys} mode='horizontal'>
                     <Menu.Item key="mailinglist">
-                        <NavLink to={`/account/${id}/mailinglist`}>
+                        <NavLink to={`/account/${accountId}/mailinglist`}>
                             <Icon type="mail" />{mailing}
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="variablelist">
-                        <NavLink to={`/account/${id}/variablelist`}>
+                        <NavLink to={`/account/${accountId}/variablelist`}>
                             <Icon type="setting" />{variables}
                         </NavLink>
                     </Menu.Item>
                 </Menu>
             </nav>
             <Switch>
-                <Route path='/account/:id/mailinglist' render={() => <MailingList history={history} title={mailing} id={id} />} />
-                <Route path='/account/:id/variablelist' render={() => <VariablesList title={variables} id={id} /> } />
+                <Route path='/account/:accountId/mailinglist' render={() => <MailingList history={history} title={mailing} accountId={accountId} />} />
+                <Route path='/account/:accountId/variablelist' render={() => <VariablesList title={variables} accountId={accountId} /> } />
                 <Route path="*" component={PageNotFound} />
             </Switch>
         </div>

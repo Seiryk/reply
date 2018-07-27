@@ -45,7 +45,6 @@ export const UPDATE_USER_ACCESS_GROUP = 'UPDATE_USER_ACCESS_GROUP';
 export const GET_LOGS_LIST = 'GET_LOGS_LIST';
 
 //authorization
-export const UNAUTHENTICATED = 'UNAUTHENTICATED';
 export const AUTHENTICATED = 'AUTHENTICATED';
 export const ROLE_USER = 'ROLE_USER';
 export const ROLE_RESP = 'ROLE_RESPONSIBLE';

@@ -21,7 +21,7 @@ export default class Dropdown extends Component {
                  disabled={disabled}
                  className={!defaultValue && name === 'applServiceValue' ? 'customDropDown': '' }
                  value={defaultValue} 
-                 placeholder= 'выберите значение'
+                 placeholder= 'Выберите значение'
                  onChange={this.handleChange} 
                  style={{ width }}>
                     {

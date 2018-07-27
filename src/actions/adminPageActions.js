@@ -11,6 +11,7 @@ import {
      LOAD_ACCESS_GROUP } from '../utils/constants';
 import * as database from './data'
 
+//  получение всех доступов для настройки доступов в админке
 export const loadAllAccesses = () => dispatch => {
     // api.post(arg, 'url', (resp) => {
     //     alert('user added');
@@ -25,7 +26,9 @@ export const loadAllAccesses = () => dispatch => {
     //   });
 }
 
+// получение списка пользователей конкретного доступа
 export const loadAccessGroup = (activeAccessGroup) => (dispatch, getState) => {
+    console.log(activeAccessGroup)
     // api.post(arg, 'url', (resp) => {
     //     alert('user added');
     const { adminPage: { allAccessGroups } } = getState();
@@ -45,6 +48,7 @@ export const loadAccessGroup = (activeAccessGroup) => (dispatch, getState) => {
     //   });
 }
 
+// удаление пользователя из списка доступов
 export const deleteUser = ({id, accessGroup}) => (dispatch) => {
     dispatch({ type: ACCESS_GROUP_LOADER});
     setTimeout(()=> {
@@ -53,6 +57,8 @@ export const deleteUser = ({id, accessGroup}) => (dispatch) => {
     },1000)
 }
 
+
+// добавление пользователя в список доступов
 export const updateUserAccessGroups = ({name, value}) => (dispatch) => {
     dispatch({ type: ACCESS_GROUP_LOADER});
     if (name === 'replyAccessGroup') {
@@ -68,6 +74,7 @@ export const updateUserAccessGroups = ({name, value}) => (dispatch) => {
     }
 }
 
+// получение списка логов
 export const getlogsList = (dateObj) => (dispatch) => {
     dispatch({ type: ACCESS_GROUP_LOADER});
         setTimeout(()=> {

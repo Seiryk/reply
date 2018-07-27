@@ -11,7 +11,7 @@ import AllAccountsTableContent from './AllAccountsTableContent';
 import AddBtn from '../UI/addButton';
 
 import { createAccount, editAccount, deleteAccount, loadAllAccounts } from '../../actions/index'
-import { validation, deleteSelectedItem, makeFieldEditable, closeEditMode, addAccountIdToHeders } from '../../utils/additionalFunctions'
+import { validation, deleteSelectedItem, makeFieldEditable, closeEditMode } from '../../utils/additionalFunctions'
 
 import './style/AllAccounts.less'
 
@@ -41,7 +41,6 @@ class AllAccountsPage extends Component {
     }
     openAccount = ({id}) => {
         this.props.history.push(`/account/${id}/mailinglist`)
-        addAccountIdToHeders(id);
     }
 
     openEmptyRow = () => this.setState({ show: true });
@@ -81,7 +80,7 @@ class AllAccountsPage extends Component {
         }
         else notification(error, emptyError + formatError);
     }
-
+//  делает поля аккаунта редактируемыми
     makeEditable = ({id}) => {
         makeFieldEditable(id, this, 'allAccountsList', 'name', 'APIkey');
     }
@@ -89,6 +88,7 @@ class AllAccountsPage extends Component {
     componentWillReceiveProps(nextProps){
         this.setState({allAccountsList: nextProps.allAccountsList})
     }
+    // закрывает режим редактирования
     closeEditMode = () => {
         closeEditMode(this, 'allAccountsList')
     }

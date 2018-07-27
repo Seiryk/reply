@@ -15,8 +15,8 @@ import { deleteSelectedItem, makeFieldEditable, closeEditMode } from '../../../u
 class VariablesList extends Component {
     state = {
         variablesList: [],
-        newFieldName: '',
-        newProjectName: '',
+        newFieldName: null,
+        newProjectName: null,
         fieldName: '',
         projectName: '',
         emptyVariableRow: false
@@ -26,7 +26,7 @@ class VariablesList extends Component {
         const { fieldName, projectName} = this.state;
         return variablesList.map((el, index) => {
             return(
-                <div key={index} className='rowWraper'>
+                <div key={index} className='rowWraper'> 
                         <VariablesTableContent
                             el={el}
                             fieldsName={fieldsName}
@@ -44,6 +44,7 @@ class VariablesList extends Component {
         })
         
     }
+    // удвление переменной
     deleteVariablesListItem = ({id}) => {
         const message = 'переменную';
         deleteSelectedItem(id, message, this, this.props.deleteVariable)
@@ -54,23 +55,23 @@ class VariablesList extends Component {
     }
 
     componentDidMount(){
-        const { id, loadAllVariables } = this.props;
-        loadAllVariables(id);
+        const { accountId, loadAllVariables } = this.props;
+        loadAllVariables(accountId);
     }
-
+// добавление переменной
     addNewVariable = () => {
         const { newFieldName, newProjectName } = this.state;
-        if ( newFieldName.length && newProjectName.length ) {
+        if ( newFieldName && newProjectName ) {
             this.props.createVariable({projectName: newProjectName, fieldName: newFieldName})
-            this.setState({ newFieldName: '', newProjectName: '', emptyVariableRow: true})
+            this.setState({ newFieldName: null, newProjectName: null, emptyVariableRow: true})
         }
         else notification('error', 'Поля не заполнены');
     }
-
+//  делает поле редактируемым 
     makeFieldEditable = ({id}) => {
         makeFieldEditable(id, this, 'variablesList', 'projectName', 'fieldName');
     }
-
+//  редактирование переменной
     editVariableItem = (el) => {
         const { fieldName, projectName  } = this.state;
         if (fieldName !== el.fieldName.value || projectName !== el.projectName.value) {
@@ -82,10 +83,10 @@ class VariablesList extends Component {
         closeEditMode(this, 'variablesList')
     }
 
-    closeEmptyVariableRow = () => this.setState({ newFieldName: '', newProjectName: '', emptyVariableRow: false });
+    closeEmptyVariableRow = () => this.setState({ newFieldName: null, newProjectName: null, emptyVariableRow: false });
 
     showEmptyVariableRow = () => this.setState({emptyVariableRow: true});
-
+// обработчик дропдауна для получения данных
     dropdownHandleChange = (name, {selectedVal: val}) => {
         this.setState({
             [name]: val
@@ -118,8 +119,8 @@ class VariablesList extends Component {
                             emptyVariableRow || !variablesList.length ? <NewVariableEmptyRow
                                 fieldsName={fieldsName}
                                 projectsName={projectsName}
-                                newFieldName={newFieldName}
-                                newProjectName={newProjectName}
+                                newFieldName={newFieldName || undefined}
+                                newProjectName={newProjectName || undefined}
                                 dropdownHandleChange={this.dropdownHandleChange}
                                 closeEmptyVariableRow={this.closeEmptyVariableRow}
                                 addNewVariable={this.addNewVariable}/> :

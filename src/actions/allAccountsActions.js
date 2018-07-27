@@ -21,6 +21,7 @@ const arr = [
     },
 ]; 
 
+//  создание аккаунта
 export const createAccount = (arg) => dispatch => {
     console.log(arg)
     // api.post(arg, 'url', (resp) => {
@@ -35,6 +36,7 @@ export const createAccount = (arg) => dispatch => {
     //     console.log(err);
     //   });
 }
+// загрузка всех аккаунтов
 export const loadAllAccounts = () => dispatch => {
     // api.post(arg, 'url', (resp) => {
     //     alert('user added');
@@ -48,7 +50,7 @@ export const loadAllAccounts = () => dispatch => {
     //     console.log(err);
     //   });
 }
-
+// удаление аккаунта
 export const deleteAccount = (id) => dispatch => {
     console.log(id)
     // api.post(arg, 'url', (resp) => {
@@ -63,6 +65,7 @@ export const deleteAccount = (id) => dispatch => {
     //   });
 }
 
+// изменение аккаунта
 export const editAccount = (arg) => dispatch => {
     console.log(arg)
     // api.post(arg, 'url', (resp) => {

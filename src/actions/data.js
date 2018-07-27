@@ -325,6 +325,20 @@ export const replyAccessGroup = [
         id: '24523'
     },
 ]
+export const accountAccessGroup = [
+    {
+        name: 'stern',
+        id: '123123'
+    },
+    {
+        name: 'nevis',
+        id: '46644'
+    },
+    {
+        name: 'pixel',
+        id: '24523'
+    },
+]
 export const adminAccessGroup = [
     {
         name: 'rock',
@@ -339,10 +353,26 @@ export const adminAccessGroup = [
         id: '53363'
     },
 ]
+export const accessSavedAccouns = [
+    {
+        name: 'rock',
+        accounts: ['pixel@gmai.com', 'stern@gmail.com']
+    },
+    {
+        name: 'smile',
+        accounts: ['pixel@gmai.com', 'stern@gmail.com']
+    },
+    {
+        name: 'fok',
+        accounts: ['pixel@gmai.com', 'stern@gmail.com']
+
+    },
+]
 
 export const allAccesses = [
-    {value: 'replyAccessGroup', text: 'reply'},
-    {value: 'adminAccessGroup', text: 'admin'},
+    {value: 'replyAccessGroup', text: 'Доступ к Reply Service'},
+    {value: 'adminAccessGroup', text: 'Доступ к разделу "Администрирование"'},
+    {value: 'accessSavedAccouns', text: 'Доступ к сохраненным аккаунтам Reply'},
     ]
 
 export const accessUsers = [

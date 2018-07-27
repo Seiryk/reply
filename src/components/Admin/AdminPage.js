@@ -8,7 +8,7 @@ import AccessConfig from './AccessConfig';
 import './styles/admin.less'
 
 
-const AdmimPage = ({match: {params: { id }}, history, location: {pathname}}) =>  {
+const AdmimPage = ({location: {pathname}}) =>  {
     let currentLinkArr = pathname.split('/');
     const currentLink = currentLinkArr[currentLinkArr.length - 1];
     const selectedKeys = [currentLink];
@@ -31,8 +31,8 @@ const AdmimPage = ({match: {params: { id }}, history, location: {pathname}}) => 
                 </Menu>
             </nav>
             <Switch>
-                <Route path='/admin/access' render={() => <AccessConfig />} />
-                <Route path='/admin/logs' render={() => <LogsList /> } />
+                <Route path='/admin/access' component={AccessConfig} />
+                <Route path='/admin/logs' component={LogsList} />
                 <Route path="*" component={PageNotFound} />
             </Switch>
         </div>

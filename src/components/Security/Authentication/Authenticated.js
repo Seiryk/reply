@@ -9,12 +9,10 @@ import Footer from '../../Footer/footer'
 import AllAccounts from '../../AllAccounts/AllAccounts'
 import {addBaseAxiosSettings} from '../../../utils/additionalFunctions'
 import {authorizePageUser, authorizePageAdmin} from '../Authorization/AuthorizePage'
-const Account = () => <Async load={import('../../Account/Account')} />;
+const AccountWraper = () => <Async load={import('../../Account/AccountWraper')} />;
 const AdminPage = () => <Async load={import('../../Admin/AdminPage')} />;
-const AddMailing = () => <Async load={import('../../AddMailing/addMailing')} />;
 
-const RouteAccount = authorizePageUser(Account);
-const RouteAddMailing = authorizePageUser(AddMailing);
+const RouteAccountWraper = authorizePageUser(AccountWraper);
 const RouteAllAccounts = authorizePageUser(AllAccounts);
 const RouteAdminPage = authorizePageAdmin(AdminPage);
 
@@ -49,26 +47,22 @@ class Authenticated extends Component {
 
     render() {
         if (!this.checkUserIsAunthenticated()) {
-            window.localStorage.removeItem('user');
-            this.props.history.push('/login');
-        }else{
-            return (
-                <div>
-                    <Header />
-                    <section>
-                        <Switch>
-                            <Route path="/account/:id" component={RouteAccount}/>
-                            <Route path="/admin/" component={RouteAdminPage}/>
-                            <Route path='/mailing/add' component={RouteAddMailing} />
-                            <Route path='/mailing/edit/:id' component={RouteAddMailing} />
-                            <Route path="/" exact component={RouteAllAccounts}/>
-                            <Route path="*" component={PageNotFound} />
-                        </Switch>
-                    </section>
-                    <Footer />
-                </div>
-            )
+            return null
         }
+        return (
+            <div>
+                <Header />
+                <section>
+                    <Switch>
+                        <Route path="/account/:accountId" component={RouteAccountWraper}/>
+                        <Route path="/admin/" component={RouteAdminPage}/>
+                        <Route path="/" exact component={RouteAllAccounts}/>
+                        <Route path="*" component={PageNotFound} />
+                    </Switch>
+                </section>
+                <Footer />
+            </div>
+            )
     }
 
 }
